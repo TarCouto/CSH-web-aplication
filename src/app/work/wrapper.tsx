@@ -2,6 +2,7 @@ import { ContactSection } from '@/components/ContactSection'
 import { Container } from '@/components/Container'
 import { FadeIn } from '@/components/FadeIn'
 import { GrayscaleTransitionImage } from '@/components/GrayscaleTransitionImage'
+import { JsonLd } from '@/components/JsonLd'
 import { MDXComponents } from '@/components/MDXComponents'
 import { PageIntro } from '@/components/PageIntro'
 import { PageLinks } from '@/components/PageLinks'
@@ -22,6 +23,19 @@ export default async function CaseStudyLayout({
 
   return (
     <RootLayout>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: caseStudy.client,
+          description: caseStudy.description,
+          provider: {
+            '@type': 'Organization',
+            name: 'Couto Software House',
+          },
+          serviceType: caseStudy.service,
+        }}
+      />
       <article className="mt-24 sm:mt-32 lg:mt-40">
         <header>
           <PageIntro eyebrow="Case Study" title={caseStudy.title} centered>

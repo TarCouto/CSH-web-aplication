@@ -36,7 +36,7 @@ function CaseStudies({
                   <div className="sm:flex sm:items-center sm:gap-x-6 lg:block">
                     <Image
                       src={caseStudy.logo}
-                      alt=""
+                      alt={`${caseStudy.client} logo`}
                       className="h-16 w-16 flex-none"
                       unoptimized
                     />
@@ -97,6 +97,12 @@ export const metadata: Metadata = {
   title: 'Our Work',
   description:
     'Explore our portfolio of high-performance web applications, SPAs, and landing pages built for agencies and SaaS companies.',
+  alternates: { canonical: '/work' },
+  openGraph: {
+    title: 'Our Work - Couto Software House',
+    description: 'Explore our portfolio of high-performance web applications, SPAs, and landing pages built for agencies and SaaS companies.',
+    url: '/work',
+  },
 }
 
 export default async function Work() {

@@ -49,6 +49,12 @@ export const metadata: Metadata = {
   title: 'About Us',
   description:
     'Couto Software House is a Brazilian software engineering company with 4+ years of experience building high-performance web applications.',
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About Us - Couto Software House',
+    description: 'Couto Software House is a Brazilian software engineering company with 4+ years of experience building high-performance web applications.',
+    url: '/about',
+  },
 }
 
 export default async function About() {

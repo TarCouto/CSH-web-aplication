@@ -147,6 +147,12 @@ export const metadata: Metadata = {
   title: 'Contact Us',
   description:
     'Build something great together. Get in touch with Couto Software House.',
+  alternates: { canonical: '/contact' },
+  openGraph: {
+    title: 'Contact Us - Couto Software House',
+    description: 'Build something great together. Get in touch with Couto Software House.',
+    url: '/contact',
+  },
 }
 
 export default function Contact() {

@@ -1,6 +1,7 @@
 import { ContactSection } from '@/components/ContactSection'
 import { Container } from '@/components/Container'
 import { FadeIn } from '@/components/FadeIn'
+import { JsonLd } from '@/components/JsonLd'
 import { MDXComponents } from '@/components/MDXComponents'
 import { PageLinks } from '@/components/PageLinks'
 import { RootLayout } from '@/components/RootLayout'
@@ -21,6 +22,22 @@ export default async function BlogArticleWrapper({
 
   return (
     <RootLayout>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: article.title,
+          datePublished: article.date,
+          author: {
+            '@type': 'Person',
+            name: article.author.name,
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Couto Software House',
+          },
+        }}
+      />
       <Container as="article" className="mt-24 sm:mt-32 lg:mt-40">
         <FadeIn>
           <header className="mx-auto flex max-w-5xl flex-col text-center">

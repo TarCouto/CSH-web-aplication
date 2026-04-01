@@ -17,6 +17,12 @@ export const metadata: Metadata = {
   title: 'Blog',
   description:
     'Insights on web development, performance optimization, and modern frontend engineering from Couto Software House.',
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    title: 'Blog - Couto Software House',
+    description: 'Insights on web development, performance optimization, and modern frontend engineering from Couto Software House.',
+    url: '/blog',
+  },
 }
 
 export default async function Blog() {

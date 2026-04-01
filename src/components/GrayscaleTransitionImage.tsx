@@ -9,7 +9,7 @@ export function GrayscaleTransitionImage(
   return (
     <div className="group relative">
       <Image
-        alt=""
+        alt={props.alt || 'Couto Software House case study'}
         {...props}
         className={`${props.className ?? ''} grayscale transition duration-500 hover:grayscale-0`}
       />

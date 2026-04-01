@@ -231,6 +231,12 @@ export const metadata: Metadata = {
   title: 'Our Process',
   description:
     'Our proven development process ensures every project is delivered on time, on budget, and built to perform.',
+  alternates: { canonical: '/process' },
+  openGraph: {
+    title: 'Our Process - Couto Software House',
+    description: 'Our proven development process ensures every project is delivered on time, on budget, and built to perform.',
+    url: '/process',
+  },
 }
 
 export default function Process() {

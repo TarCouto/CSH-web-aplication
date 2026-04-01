@@ -154,6 +154,12 @@ export const dynamic = 'force-static'
 export const metadata: Metadata = {
   description:
     'Couto Software House — Brazilian software engineering company specializing in high-performance web applications.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'Couto Software House - High-Performance Web Applications',
+    description: 'Brazilian software engineering company specializing in high-performance web applications, SPAs, and conversion-focused digital products.',
+    url: '/',
+  },
 }
 
 export default async function Home() {
