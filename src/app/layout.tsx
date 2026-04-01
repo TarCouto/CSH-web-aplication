@@ -3,7 +3,7 @@ import { type Metadata } from 'next'
 import { JsonLd } from '@/components/JsonLd'
 import '@/styles/tailwind.css'
 
-const BASE_URL = 'https://csh-web-aplication.vercel.app'
+const BASE_URL = 'https://couto.software'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

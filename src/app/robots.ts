@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
     ],
-    sitemap: 'https://csh-web-aplication.vercel.app/sitemap.xml',
+    sitemap: 'https://couto.software/sitemap.xml',
   }
 }

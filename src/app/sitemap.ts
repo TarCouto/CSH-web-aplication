@@ -1,6 +1,6 @@
 import { type MetadataRoute } from 'next'
 
-const BASE_URL = 'https://csh-web-aplication.vercel.app'
+const BASE_URL = 'https://couto.software'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
