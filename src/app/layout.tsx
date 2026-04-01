@@ -47,7 +47,7 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full bg-white text-base antialiased" suppressHydrationWarning>
-      <body className="flex min-h-full flex-col" suppressHydrationWarning>
+      <body className="flex min-h-full flex-col overflow-x-hidden" suppressHydrationWarning>
         <JsonLd
           data={{
             '@context': 'https://schema.org',
