@@ -1,0 +1,58 @@
+import logo from '@/images/clients/family-fund/logomark-dark.svg'
+import imageHero from './hero.jpg'
+
+export const caseStudy = {
+  client: 'Performance & SEO',
+  title: 'Why performance is the foundation of every successful website',
+  description:
+    'A fast website is not a luxury — it is the baseline for ranking on Google, converting visitors, and delivering a professional experience.',
+  summary: [
+    'Most businesses lose up to 53% of visitors when a page takes more than 3 seconds to load. Performance is not just a technical metric — it directly impacts revenue.',
+    'We build every project with server-side rendering, static generation, and Core Web Vitals optimization to ensure your site loads instantly and ranks higher.',
+  ],
+  logo,
+  image: { src: imageHero },
+  date: '2023-01',
+  service: 'Web Performance',
+  testimonial: {
+    author: { name: 'Tarcisio Couto', role: 'CSH Founder' },
+    content:
+      'A website that loads in under one second is not a nice-to-have — it is a competitive advantage that compounds over time.',
+  },
+}
+
+export const metadata = {
+  title: `${caseStudy.client} — CSH`,
+  description: caseStudy.description,
+}
+
+## The cost of a slow website
+
+Every 100ms of delay in page load reduces conversion by 7%. Users expect instant responses — if your site feels slow, they leave before reading a single word.
+
+Search engines like Google use Core Web Vitals (LCP, FID, CLS) as ranking factors. A slow, poorly optimized site is invisible on search results, no matter how good your content is.
+
+This is why we treat performance as a first-class requirement, not an afterthought. Every project we deliver is built with server-side rendering (SSR), incremental static regeneration (ISR), and aggressive code splitting from day one.
+
+## How we achieve it
+
+<TagList>
+  <TagListItem>Server-Side Rendering (Next.js)</TagListItem>
+  <TagListItem>Core Web Vitals Optimization</TagListItem>
+  <TagListItem>Image & Font Optimization</TagListItem>
+  <TagListItem>CDN & Edge Deployment</TagListItem>
+</TagList>
+
+<Blockquote
+  author={{ name: 'Tarcisio Couto', role: 'CSH Founder' }}
+>
+  We do not ship a project until Lighthouse scores are above 90. Performance
+  is the difference between a website that works and a website that converts.
+</Blockquote>
+
+<StatList>
+  <StatListItem value="95+" label="Lighthouse score" />
+  <StatListItem value="3x" label="Faster than average" />
+  <StatListItem value="40%" label="More organic traffic" />
+  <StatListItem value="<1s" label="Time to interactive" />
+</StatList>

@@ -11,6 +11,8 @@ import { RootLayout } from '@/components/RootLayout'
 import { formatDate } from '@/lib/formatDate'
 import { loadArticles } from '@/lib/mdx'
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   title: 'Blog',
   description:

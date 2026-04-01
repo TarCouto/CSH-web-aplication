@@ -225,6 +225,8 @@ function Values() {
   )
 }
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   title: 'Our Process',
   description:

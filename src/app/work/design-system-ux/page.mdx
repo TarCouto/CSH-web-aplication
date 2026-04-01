@@ -1,0 +1,58 @@
+import logo from '@/images/clients/phobia/logomark-dark.svg'
+import imageHero from './hero.jpg'
+
+export const caseStudy = {
+  client: 'Design System & UX',
+  title: 'How a design system turns visitors into customers',
+  description:
+    'A consistent design system is not just about aesthetics — it builds trust, reduces friction, and guides users toward conversion.',
+  summary: [
+    'Users form an opinion about your site in 0.05 seconds. Inconsistent design, broken layouts, and confusing navigation destroy credibility before your content even loads.',
+    'We build every project with a structured design system — reusable components, consistent spacing, accessible colors, and responsive layouts that work on every device.',
+  ],
+  logo,
+  image: { src: imageHero },
+  date: '2022-06',
+  service: 'Design System & Frontend',
+  testimonial: {
+    author: { name: 'Tarcisio Couto', role: 'CSH Founder' },
+    content:
+      'Good design is invisible. When a user completes a purchase without thinking about the interface, the design system did its job.',
+  },
+}
+
+export const metadata = {
+  title: `${caseStudy.client} — CSH`,
+  description: caseStudy.description,
+}
+
+## Design is not decoration — it is conversion
+
+A beautiful website that confuses users is a failed website. Design systems exist to remove ambiguity: every button, every color, every spacing decision has a purpose.
+
+When users land on your site, they need to instantly understand what you offer and how to take the next step. A well-built design system creates visual hierarchy, reduces cognitive load, and builds the trust needed for a visitor to become a customer.
+
+Accessibility is not optional — it is part of good design. We ensure every component meets WCAG standards, works with screen readers, and adapts to any screen size.
+
+## How we approach design systems
+
+<TagList>
+  <TagListItem>Component Library (React/Angular)</TagListItem>
+  <TagListItem>Tailwind CSS & Design Tokens</TagListItem>
+  <TagListItem>WCAG Accessibility</TagListItem>
+  <TagListItem>Responsive-First Development</TagListItem>
+</TagList>
+
+<Blockquote
+  author={{ name: 'Tarcisio Couto', role: 'CSH Founder' }}
+>
+  Every pixel has a job. If a design element does not guide the user toward
+  action, it is noise — and we remove it.
+</Blockquote>
+
+<StatList>
+  <StatListItem value="60%" label="Less user drop-off" />
+  <StatListItem value="100%" label="Accessibility score" />
+  <StatListItem value="2x" label="Conversion rate" />
+  <StatListItem value="sub-200ms" label="Interaction response" />
+</StatList>

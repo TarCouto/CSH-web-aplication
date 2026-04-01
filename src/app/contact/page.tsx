@@ -141,6 +141,8 @@ function ContactDetails() {
   )
 }
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   title: 'Contact Us',
   description:

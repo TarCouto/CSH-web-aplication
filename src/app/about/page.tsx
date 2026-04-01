@@ -43,6 +43,8 @@ function Culture() {
   )
 }
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   title: 'About Us',
   description:

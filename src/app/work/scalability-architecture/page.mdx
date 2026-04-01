@@ -1,0 +1,58 @@
+import logo from '@/images/clients/unseal/logomark-dark.svg'
+import imageHero from './hero.jpg'
+
+export const caseStudy = {
+  client: 'Scalability & Architecture',
+  title: 'Building applications that grow with your business',
+  description:
+    'A well-architected application handles 10 users the same way it handles 10,000. Scalability is not about adding servers — it is about writing the right code from the start.',
+  summary: [
+    'Most projects fail not because of bad ideas, but because of fragile architecture. When the codebase cannot scale, every new feature becomes slower and more expensive to build.',
+    'We design component-driven architectures with TypeScript, clean API layers, and separation of concerns — so your product can grow without rewriting everything.',
+  ],
+  logo,
+  image: { src: imageHero },
+  date: '2022-10',
+  service: 'Application Architecture',
+  testimonial: {
+    author: { name: 'Tarcisio Couto', role: 'CSH Founder' },
+    content:
+      'The most expensive code is the code you have to rewrite. We invest in architecture upfront so our clients never hit that wall.',
+  },
+}
+
+export const metadata = {
+  title: `${caseStudy.client} — CSH`,
+  description: caseStudy.description,
+}
+
+## Why architecture matters more than features
+
+A startup that ships fast but builds on a weak foundation will eventually stop. Technical debt accumulates, bugs multiply, and adding a simple feature takes weeks instead of days.
+
+Professional software engineering means choosing the right patterns from the beginning: typed contracts with TypeScript, modular components that can be tested in isolation, and API layers that decouple your frontend from your backend.
+
+This is not over-engineering — it is the difference between a product that survives its first year and one that needs a full rewrite after six months.
+
+## How we build for scale
+
+<TagList>
+  <TagListItem>TypeScript end-to-end</TagListItem>
+  <TagListItem>Component-Driven Architecture</TagListItem>
+  <TagListItem>REST & API Layer Design</TagListItem>
+  <TagListItem>Automated Testing & CI/CD</TagListItem>
+</TagList>
+
+<Blockquote
+  author={{ name: 'Tarcisio Couto', role: 'CSH Founder' }}
+>
+  We write code that your next developer will thank us for. Clean architecture
+  is not a cost — it is an investment that pays for itself every sprint.
+</Blockquote>
+
+<StatList>
+  <StatListItem value="100%" label="TypeScript coverage" />
+  <StatListItem value="sub-1s" label="Page transitions" />
+  <StatListItem value="90%+" label="Test coverage" />
+  <StatListItem value="0" label="Production incidents" />
+</StatList>

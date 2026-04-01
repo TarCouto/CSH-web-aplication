@@ -9,54 +9,33 @@ import { List, ListItem } from '@/components/List'
 import { SectionIntro } from '@/components/SectionIntro'
 import { StylizedImage } from '@/components/StylizedImage'
 import { Testimonial } from '@/components/Testimonial'
-import logoBrightPath from '@/images/clients/bright-path/logo-light.svg'
-import logoFamilyFund from '@/images/clients/family-fund/logo-light.svg'
-import logoGreenLife from '@/images/clients/green-life/logo-light.svg'
-import logoHomeWork from '@/images/clients/home-work/logo-light.svg'
-import logoMailSmirk from '@/images/clients/mail-smirk/logo-light.svg'
-import logoNorthAdventures from '@/images/clients/north-adventures/logo-light.svg'
 import logoPhobiaDark from '@/images/clients/phobia/logo-dark.svg'
-import logoPhobiaLight from '@/images/clients/phobia/logo-light.svg'
-import logoUnseal from '@/images/clients/unseal/logo-light.svg'
+import { StatList, StatListItem } from '@/components/StatList'
 import imageLaptop from '@/images/laptop.jpg'
 import { type CaseStudy, type MDXEntry, loadCaseStudies } from '@/lib/mdx'
 import { RootLayout } from '@/components/RootLayout'
 
-const clients = [
-  ['Phobia', logoPhobiaLight],
-  ['Family Fund', logoFamilyFund],
-  ['Unseal', logoUnseal],
-  ['Mail Smirk', logoMailSmirk],
-  ['Home Work', logoHomeWork],
-  ['Green Life', logoGreenLife],
-  ['Bright Path', logoBrightPath],
-  ['North Adventures', logoNorthAdventures],
-]
-
-function Clients() {
+function Results() {
   return (
     <div className="mt-24 rounded-4xl bg-neutral-950 py-20 sm:mt-32 sm:py-32 lg:mt-56">
       <Container>
-        <FadeIn className="flex items-center gap-x-8">
-          <h2 className="text-center font-display text-sm font-semibold tracking-wider text-white sm:text-left">
-            Trusted by agencies and companies worldwide
+        <FadeIn>
+          <h2 className="font-display text-2xl font-semibold text-white">
+            Results that speak for themselves
           </h2>
-          <div className="h-px flex-auto bg-neutral-800" />
+          <p className="mt-4 text-lg text-neutral-400">
+            We focus on delivering measurable impact — faster load times,
+            higher conversion rates, and scalable architectures.
+          </p>
         </FadeIn>
-        <FadeInStagger faster>
-          <ul
-            role="list"
-            className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4"
-          >
-            {clients.map(([client, logo]) => (
-              <li key={client}>
-                <FadeIn>
-                  <Image src={logo} alt={client} unoptimized />
-                </FadeIn>
-              </li>
-            ))}
-          </ul>
-        </FadeInStagger>
+        <div className="mt-16">
+          <StatList>
+            <StatListItem invert value="50+" label="Projects delivered" />
+            <StatListItem invert value="98%" label="Client satisfaction" />
+            <StatListItem invert value="<1s" label="Average load time" />
+            <StatListItem invert value="3x" label="Conversion increase" />
+          </StatList>
+        </div>
       </Container>
     </div>
   )
@@ -142,6 +121,7 @@ function Services() {
                 src={imageLaptop}
                 sizes="(min-width: 1024px) 41rem, 31rem"
                 className="justify-center lg:justify-end"
+                priority
               />
             </FadeIn>
           </div>
@@ -169,6 +149,8 @@ function Services() {
   )
 }
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   description:
     'Couto Software House — Brazilian software engineering company specializing in high-performance web applications.',
@@ -181,7 +163,7 @@ export default async function Home() {
     <RootLayout>
       <Container className="mt-24 sm:mt-32 md:mt-56">
         <div className="max-w-3xl">
-          <h1 className="font-display text-5xl font-medium tracking-tight text-balance text-neutral-950 sm:text-7xl">
+          <h1 className="font-display text-3xl font-medium tracking-tight text-balance text-neutral-950 sm:text-5xl lg:text-7xl">
             High-performance web applications built in Brazil, delivered globally.
           </h1>
           <p className="mt-6 text-xl text-neutral-600">
@@ -192,7 +174,7 @@ export default async function Home() {
         </div>
       </Container>
 
-      <Clients />
+      <Results />
 
       <CaseStudies caseStudies={caseStudies} />
 

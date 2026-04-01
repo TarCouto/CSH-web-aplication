@@ -9,9 +9,9 @@ const navigation = [
   {
     title: 'Work',
     links: [
-      { title: 'FinConnect', href: '/work/family-fund' },
-      { title: 'DataVault', href: '/work/unseal' },
-      { title: 'MeetBrave', href: '/work/phobia' },
+      { title: 'Performance & SEO', href: '/work/performance-seo' },
+      { title: 'Scalability', href: '/work/scalability-architecture' },
+      { title: 'Design System & UX', href: '/work/design-system-ux' },
       {
         title: (
           <>
