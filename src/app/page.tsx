@@ -9,7 +9,7 @@ import { List, ListItem } from '@/components/List'
 import { SectionIntro } from '@/components/SectionIntro'
 import { StylizedImage } from '@/components/StylizedImage'
 import { Testimonial } from '@/components/Testimonial'
-import logoPhobiaDark from '@/images/clients/phobia/logo-dark.svg'
+import logoGreenLifeDark from '@/images/clients/green-life/logo-dark.svg'
 import { StatList, StatListItem } from '@/components/StatList'
 import imageLaptop from '@/images/laptop.jpg'
 import { type CaseStudy, type MDXEntry, loadCaseStudies } from '@/lib/mdx'
@@ -180,7 +180,7 @@ export default async function Home() {
 
       <Testimonial
         className="mt-24 sm:mt-32 lg:mt-40"
-        client={{ name: 'Phobia', logo: logoPhobiaDark }}
+        client={{ name: 'CSH', logo: logoGreenLifeDark }}
       >
         Couto Software House delivered a blazing-fast web application that
         exceeded our performance targets. Their expertise in Angular, React,

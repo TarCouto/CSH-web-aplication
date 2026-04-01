@@ -10,7 +10,7 @@ import { Container } from '@/components/Container'
 import { FadeIn } from '@/components/FadeIn'
 import { PageIntro } from '@/components/PageIntro'
 import { Testimonial } from '@/components/Testimonial'
-import logoPhobia from '@/images/clients/phobia/logo-dark.svg'
+import logoGreenLife from '@/images/clients/green-life/logo-dark.svg'
 import { formatDate } from '@/lib/formatDate'
 import { type CaseStudy, type MDXEntry, loadCaseStudies } from '@/lib/mdx'
 import { RootLayout } from '@/components/RootLayout'
@@ -119,7 +119,7 @@ export default async function Work() {
 
       <Testimonial
         className="mt-24 sm:mt-32 lg:mt-40"
-        client={{ name: 'CSH', logo: logoPhobia }}
+        client={{ name: 'CSH', logo: logoGreenLife }}
       >
         A professionally built website is not an expense — it is the highest-ROI
         investment a business can make in its digital presence.
