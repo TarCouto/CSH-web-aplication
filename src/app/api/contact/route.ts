@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
     await resend.emails.send({
       from: 'Couto Software House <onboarding@resend.dev>',
-      to: ['tarcisiocouto@outlook.com'],
+      to: ['tarcisiocouto10@hotmail.com'],
       subject: `New lead from ${name}${company ? ` at ${company}` : ''}`,
       html: `
         <h2>New Contact Form Submission</h2>
