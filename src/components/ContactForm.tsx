@@ -7,25 +7,26 @@ import { FadeIn } from '@/components/FadeIn'
 
 function TextInput({
   label,
+  placeholder,
   ...props
-}: React.ComponentPropsWithoutRef<'input'> & { label: string }) {
+}: React.ComponentPropsWithoutRef<'input'> & { label: string; placeholder?: string }) {
   let id = useId()
 
   return (
     <div className="group relative z-0 transition-all focus-within:z-10">
+      <label
+        htmlFor={id}
+        className="block px-6 pt-4 text-xs font-semibold text-neutral-950"
+      >
+        {label}
+      </label>
       <input
         type="text"
         id={id}
         {...props}
-        placeholder=" "
-        className="peer block w-full border border-neutral-300 bg-transparent px-6 pt-12 pb-4 text-base/6 text-neutral-950 ring-4 ring-transparent transition group-first:rounded-t-2xl group-last:rounded-b-2xl focus:border-neutral-950 focus:ring-neutral-950/5 focus:outline-hidden"
+        placeholder={placeholder}
+        className="block w-full border border-neutral-300 bg-transparent px-6 pt-1 pb-4 text-base/6 text-neutral-950 ring-4 ring-transparent transition placeholder:text-neutral-400 group-first:rounded-t-2xl group-last:rounded-b-2xl focus:border-neutral-950 focus:ring-neutral-950/5 focus:outline-hidden"
       />
-      <label
-        htmlFor={id}
-        className="pointer-events-none absolute top-1/2 left-6 -mt-3 origin-left text-base/6 text-neutral-500 transition-all duration-200 peer-not-placeholder-shown:-translate-y-4 peer-not-placeholder-shown:scale-75 peer-not-placeholder-shown:font-semibold peer-not-placeholder-shown:text-neutral-950 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:font-semibold peer-focus:text-neutral-950"
-      >
-        {label}
-      </label>
     </div>
   )
 }
@@ -104,29 +105,33 @@ export function ContactForm() {
           Work inquiries
         </h2>
         <div className="isolate mt-6 -space-y-px rounded-2xl bg-white/50">
-          <TextInput label="Name" name="name" autoComplete="name" required />
+          <TextInput label="Name" name="name" autoComplete="name" placeholder="John Smith" required />
           <TextInput
             label="Email"
             type="email"
             name="email"
             autoComplete="email"
+            placeholder="john@company.com"
             required
           />
           <TextInput
             label="Company"
             name="company"
             autoComplete="organization"
+            placeholder="Acme Inc."
           />
-          <TextInput label="Phone" type="tel" name="phone" autoComplete="tel" />
-          <TextInput label="Message" name="message" required />
+          <TextInput label="Phone" type="tel" name="phone" autoComplete="tel" placeholder="+1 (555) 123-4567" />
+          <TextInput label="Message" name="message" placeholder="Tell us about your project..." required />
           <div className="border border-neutral-300 px-6 py-8 first:rounded-t-2xl last:rounded-b-2xl">
             <fieldset>
               <legend className="text-base/6 text-neutral-500">Budget</legend>
               <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                <RadioInput label="$1K – $5K" name="budget" value="1" />
+                <RadioInput label="$5K – $10K" name="budget" value="5" />
+                <RadioInput label="$10K – $25K" name="budget" value="10" />
                 <RadioInput label="$25K – $50K" name="budget" value="25" />
                 <RadioInput label="$50K – $100K" name="budget" value="50" />
-                <RadioInput label="$100K – $150K" name="budget" value="100" />
-                <RadioInput label="More than $150K" name="budget" value="150" />
+                <RadioInput label="More than $100K" name="budget" value="100" />
               </div>
             </fieldset>
           </div>

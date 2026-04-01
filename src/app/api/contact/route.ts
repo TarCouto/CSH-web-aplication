@@ -16,10 +16,12 @@ export async function POST(request: Request) {
     }
 
     const budgetLabels: Record<string, string> = {
+      '1': '$1K – $5K',
+      '5': '$5K – $10K',
+      '10': '$10K – $25K',
       '25': '$25K – $50K',
       '50': '$50K – $100K',
-      '100': '$100K – $150K',
-      '150': 'More than $150K',
+      '100': 'More than $100K',
     }
 
     await resend.emails.send({
