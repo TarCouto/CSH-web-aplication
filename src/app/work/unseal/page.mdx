@@ -1,0 +1,58 @@
+import logo from '@/images/clients/unseal/logomark-dark.svg'
+import imageHero from './hero.jpg'
+
+export const caseStudy = {
+  client: 'DataVault',
+  title: 'Secure data management for healthcare',
+  description:
+    'DataVault is a healthcare data platform that gives patients full control over their medical records through a modern, secure web application.',
+  summary: [
+    'DataVault is a healthcare data platform that gives patients full control over their medical records through a modern, secure web application.',
+    'We built a React SPA with role-based access control, real-time data sync, and a comprehensive admin dashboard.',
+  ],
+  logo,
+  image: { src: imageHero },
+  date: '2022-10',
+  service: 'Application development',
+  testimonial: {
+    author: { name: 'Engineering Lead', role: 'DataVault' },
+    content:
+      'The CSH team built a rock-solid application with excellent performance. Their React and TypeScript expertise was evident in every component.',
+  },
+}
+
+export const metadata = {
+  title: `${caseStudy.client} Case Study`,
+  description: caseStudy.description,
+}
+
+## Overview
+
+DataVault needed a secure, performant web application that would allow patients to manage and share their health records. Security and accessibility were top priorities.
+
+We developed a React single page application with TypeScript, featuring role-based access control, JWT authentication, and end-to-end encryption for sensitive data. The admin panel gives healthcare providers a real-time view of patient interactions.
+
+The application was built with a component-driven architecture, making it easy to extend and maintain. We integrated REST APIs for data exchange and implemented comprehensive error handling throughout.
+
+## What we did
+
+<TagList>
+  <TagListItem>React SPA</TagListItem>
+  <TagListItem>TypeScript</TagListItem>
+  <TagListItem>REST API Integration</TagListItem>
+  <TagListItem>JWT Authentication</TagListItem>
+</TagList>
+
+<Blockquote
+  author={{ name: 'Engineering Lead', role: 'DataVault' }}
+>
+  CSH delivered a secure, high-performance application that our users love.
+  Their attention to detail and code quality were outstanding.
+</Blockquote>
+
+<StatList>
+  <StatListItem value="99.8%" label="Uptime" />
+  <StatListItem value="sub-1s" label="Page transitions" />
+  <StatListItem value="100%" label="Accessibility score" />
+  <StatListItem value="0" label="Security incidents" />
+</StatList>
