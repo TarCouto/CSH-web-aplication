@@ -223,7 +223,7 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="relative flex flex-auto bg-white pt-14">
+      <div className="relative flex flex-auto overflow-x-hidden bg-white pt-14">
         <div className="relative isolate flex w-full flex-col pt-9">
           <main className="w-full flex-auto">{children}</main>
 
