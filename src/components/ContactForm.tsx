@@ -14,18 +14,12 @@ function TextInput({
 
   return (
     <div className="group relative z-0 transition-all focus-within:z-10">
-      <label
-        htmlFor={id}
-        className="block px-6 pt-3 text-xs font-semibold text-neutral-950"
-      >
-        {label}
-      </label>
       <input
         type="text"
         id={id}
         {...props}
-        placeholder={placeholder}
-        className="block w-full border border-neutral-300 bg-transparent px-6 pt-0 pb-3 text-base/6 text-neutral-950 ring-4 ring-transparent transition placeholder:text-neutral-400 group-first:rounded-t-2xl group-last:rounded-b-2xl focus:border-neutral-950 focus:ring-neutral-950/5 focus:outline-hidden"
+        placeholder={placeholder || label}
+        className="block w-full border border-neutral-300 bg-transparent px-6 py-5 text-base/6 text-neutral-950 ring-4 ring-transparent transition placeholder:text-neutral-400 group-first:rounded-t-2xl group-last:rounded-b-2xl focus:border-neutral-950 focus:ring-neutral-950/5 focus:outline-hidden"
       />
     </div>
   )
