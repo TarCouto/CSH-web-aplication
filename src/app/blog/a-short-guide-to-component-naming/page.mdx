@@ -1,11 +1,15 @@
+import imageTypewriter from './typewriter.jpg'
+import imageMagnifyingGlass from './magnifying-glass.jpg'
+import imageEverydayEnglish from './everyday-english.jpg'
+
 export const article = {
-  date: '2022-12-01',
-  title: 'A Short Guide to Component Naming',
+  date: '2023-10-08',
+  title: 'The True Cost of Technical Debt and How to Avoid It',
   description:
-    "As a developer, the most important aspect of your job is naming components. It's not just about being descriptive and clear, but also about having fun and being creative.",
+    'Technical debt is not just slow code — it is a compounding tax on every feature you build. Here is how to recognize it, measure it, and prevent it from killing your product.',
   author: {
-    name: 'Couto Software House',
-    role: 'Engineering Team',
+    name: 'Tarcisio Couto',
+    role: 'Founder, CSH',
   },
 }
 
@@ -14,26 +18,76 @@ export const metadata = {
   description: article.description,
 }
 
-## 1. Brevity is Key
+## Technical debt is a business problem, not a code problem
 
-Time is scarce, don't waste it typing out long, descriptive component names. One approach is to give them short, cryptic names that only you will understand.
+Every shortcut you take in code creates a hidden cost that someone will pay later. That cost is not just developer time — it is slower feature delivery, more bugs in production, higher onboarding time for new developers, and ultimately, a product that cannot keep up with the market.
 
-Need a button? Call it "btn". A modal? How about "md"? You'll save precious minutes per day and you'll get the added benefit of being the only person in the codebase who knows where anything is. This is called job security.
+The term "technical debt" was coined by Ward Cunningham to describe the gap between how your code is and how it should be. Like financial debt, it accumulates interest. And like financial debt, if you ignore it long enough, it bankrupts you.
 
-![](./typewriter.jpg)
+![Understanding the foundations of clean code architecture](./typewriter.jpg)
 
-## 2. Rank High in Search
+## How technical debt actually kills products
 
-When working in large repos with lots of collaborators, it's important that your component ranks high when people search for anything.
+In the early stages of a project, technical debt is almost invisible. The codebase is small, the team is small, and shortcuts feel harmless. But debt compounds:
 
-One way to stand out is to include all the possible search terms in your component name. Instead of "SignInButton" you might want call it "SignInButtonAuthenticationCookieUserLogIn" which will ensure that it is returned in almost any related search result.
+**Month 1:** A feature takes 2 days to build. You skip writing tests to save time. Total debt: minimal.
 
-![](./magnifying-glass.jpg)
+**Month 6:** That same feature now has 15 dependencies. A bug appears, but without tests, you cannot pinpoint the source. Debugging takes 3 days instead of 3 hours.
 
-## 3. Mix Languages
+**Month 12:** New developers join the team. The codebase has no clear architecture, inconsistent naming, and undocumented side effects. Onboarding takes 4 weeks instead of 1.
 
-If you work remotely, it's likely you are on a global team and yet all your components have English names. This slows down your non-english colleagues considerably so you should allow them to use their native tongue when naming components.
+**Month 18:** The team spends 70% of their time fixing bugs and working around legacy code. New features take 5x longer than they should. Leadership asks why development is so slow.
 
-You can create an index file that maps all the different languages within your repo. Need a dropdown? Look for "Desplegable". A form? Search "Форма". You'll learn multiple new languages while being more inclusive to your colleagues.
+This is not an exaggeration. We have seen this pattern in dozens of projects that came to us for rescue.
 
-![](./everyday-english.jpg)
+![Examining code quality and identifying technical debt](./magnifying-glass.jpg)
+
+## The five most expensive types of technical debt
+
+**1. No TypeScript or weak typing**
+When your codebase has no type safety, every function is a guessing game. Developers waste hours reading code that types would explain in seconds. Bugs that TypeScript would catch at compile time instead reach production.
+
+**2. No component architecture**
+When UI code is not organized into reusable, isolated components, every change risks breaking something unrelated. A button style change should not require testing the entire application.
+
+**3. No automated tests**
+Without tests, every deployment is a gamble. Teams deploy less frequently, which means larger releases, which means more risk, which means more bugs. It is a vicious cycle.
+
+**4. Hardcoded dependencies and tight coupling**
+When your frontend is tightly coupled to a specific API structure, backend changes break the UI. Clean API layers and data transformation functions prevent this entirely.
+
+**5. No CI/CD pipeline**
+Manual deployments are slow, error-prone, and scary. Teams that deploy manually deploy less often, which slows down feedback loops and delays value delivery.
+
+## How we prevent technical debt at CSH
+
+Every project we build follows these principles from day one:
+
+**TypeScript everywhere.** No exceptions. Every component, every function, every API response is typed. This eliminates an entire category of bugs and makes the codebase self-documenting.
+
+**Component-driven architecture.** We build isolated, reusable components that can be tested independently. When a component changes, nothing else breaks.
+
+**Automated testing from sprint one.** We write unit tests for business logic, integration tests for API interactions, and end-to-end tests for critical user flows. Tests are not optional — they are part of the definition of done.
+
+**CI/CD from the first commit.** Every push triggers automated tests, linting, and preview deployments. If something breaks, we know within minutes — not after a customer reports it.
+
+**Code reviews on every pull request.** No code reaches production without being reviewed by at least one other engineer. This catches architectural issues early and shares knowledge across the team.
+
+![Building sustainable codebases that scale over time](./everyday-english.jpg)
+
+## The ROI of clean code
+
+Clean code is not a luxury for teams with extra time. It is the fastest path to shipping reliable software:
+
+- **50% fewer bugs** in production when using TypeScript with strict mode
+- **3x faster onboarding** for new developers on well-architected codebases
+- **80% reduction** in deployment incidents with automated CI/CD pipelines
+- **2x faster feature delivery** after the initial investment in architecture
+
+The upfront cost of writing clean code is real. But it is a fraction of the cost of rewriting a product that grew too fast on a weak foundation.
+
+## The bottom line
+
+Technical debt is a choice. Every project starts clean — it is the decisions made along the way that determine whether the codebase remains maintainable or becomes a liability.
+
+The cheapest time to prevent technical debt is at the beginning. The most expensive time is after it has already accumulated. If your codebase is slowing your team down, the cost of fixing it only goes up from here.

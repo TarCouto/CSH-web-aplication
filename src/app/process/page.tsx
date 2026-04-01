@@ -115,11 +115,12 @@ function Build() {
       </div>
 
       <Blockquote
-        author={{ name: 'Debra Fiscal', role: 'CEO of Unseal' }}
+        author={{ name: 'Tarcisio Couto', role: 'Founder, CSH' }}
         className="mt-12"
       >
-        The team at CSH kept us informed at every step. Their development
-        velocity and code quality were outstanding.
+        Transparency is not just a value — it is how we work. Our clients
+        always know exactly where their project stands, what comes next,
+        and why every decision was made.
       </Blockquote>
     </Section>
   )

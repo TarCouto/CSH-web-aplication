@@ -60,11 +60,10 @@ function LinkedInIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 export const socialMediaProfiles = [
   {
     title: 'LinkedIn',
-    href: 'https://linkedin.com/company/couto-software-house',
+    href: 'https://www.linkedin.com/in/tarcisio-couto/',
     icon: LinkedInIcon,
   },
-  { title: 'Instagram', href: 'https://instagram.com', icon: InstagramIcon },
-  { title: 'GitHub', href: 'https://github.com', icon: GitHubIcon },
+  { title: 'GitHub', href: 'https://github.com/TarCouto', icon: GitHubIcon },
 ]
 
 export function SocialMedia({

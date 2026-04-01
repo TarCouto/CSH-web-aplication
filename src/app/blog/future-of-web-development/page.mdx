@@ -1,11 +1,15 @@
+import imageLaptop from './laptop.jpg'
+import imagePilot from './pilot.jpg'
+import imageServer from './server.jpg'
+
 export const article = {
-  date: '2023-04-06',
-  title: 'The Future of Web Development: Our Predictions for 2023',
+  date: '2024-03-15',
+  title: 'Why Web Performance Directly Impacts Your Revenue',
   description:
-    "Let's explore the latest trends in web development, and regurgitate some predictions we read on X for how they will shape the industry in the coming year.",
+    'A one-second delay in page load can cost you 7% in conversions. Here is why performance is the most important investment you can make in your website.',
   author: {
-    name: 'Couto Software House',
-    role: 'Engineering Team',
+    name: 'Tarcisio Couto',
+    role: 'Founder, CSH',
   },
 }
 
@@ -14,32 +18,50 @@ export const metadata = {
   description: article.description,
 }
 
-## 1. AI Assisted Development
+## Speed is not a feature — it is the product
 
-With the launch of Github Copilot in 2022 the industry got its first glimpse at what it would look like to have Stack Overflow plumbed straight into your IDE. Copilot has given thousands of developers what they always longed for: plausible deniability over the bugs they write.
+When a user clicks a link to your website, a clock starts ticking. Research from Google shows that 53% of mobile users abandon a page that takes longer than 3 seconds to load. Every 100 milliseconds of additional delay reduces conversion rates by up to 7%.
 
-![](./pilot.jpg)
+This is not a theoretical problem. It is money leaving your business every single day.
 
-In 2023 we can expect these assistants to become more sophisticated and for that to have ripple effects throughout the industry.
+![A developer optimizing website performance on a laptop](./laptop.jpg)
 
-We predict that traffic to MDN will decline precipitously as developers realise they no longer need to look up JS array methods. We also expect Stack Overflow's sister site, Prompt Overflow, to become one of the most popular sites on the internet in a matter of months.
+## Core Web Vitals: what Google actually measures
 
-## 2. Rendering Patterns
+Google ranks your website based on three key metrics that directly affect user experience:
 
-To server render or not to server render? In 2022 the owners of the internet, Vercel, decided that instead of making this choice once for your whole application, now you will need to decide every time you write a new component.
+**Largest Contentful Paint (LCP)** measures how long it takes for the main content of your page to appear. If your hero image or headline takes more than 2.5 seconds to render, Google considers that a poor experience.
 
-Because front-end development was becoming too easy, the same people who write CSS will now need to know how Streaming SSR and Progressive Hydration work.
+**First Input Delay (FID)** measures how quickly your page responds to the first user interaction. A button that takes 300ms to react feels broken. Users do not wait — they leave.
 
-![](./server.jpg)
+**Cumulative Layout Shift (CLS)** measures visual stability. When elements jump around as the page loads — text shifts, images resize, buttons move — users lose trust in your site instantly.
 
-In 2023 we can expect frameworks to adopt increasingly granular rendering patterns culminating in per-line rendering (PLR) later this year. We can also expect job postings for Rendering Reliability Engineers to reach an all time high.
+![Server infrastructure powering fast web applications](./server.jpg)
 
-## 3. JS Runtimes
+## The compounding cost of a slow website
 
-Because choosing a JS runtime was one of the only areas where a developer wasn't paralysed with choice, in early 2020, the creator of Node gave us something new to agonise over. The launch of Deno and Bun heralded the final mutation of JavaScript into a language that can truly run anywhere it wasn't intended to.
+A slow website does not just lose one visitor. It loses that visitor, every referral they would have made, and every future visit they would have returned for. The damage compounds over time.
 
-These new JS runtimes mean we can now serve HTML faster than ever before. For example, we've reduced the Time to First Byte (TTFB) of this blog to -0.4s. That means it actually loaded before you clicked the link.
+Consider this: if your site converts at 3% with a 2-second load time, improving to a 1-second load time could push that to 5% or higher. On 10,000 monthly visitors, that is 200 additional conversions per month — without spending a single dollar on advertising.
 
-![](./laptop.jpg)
+Search engines amplify this effect. Google prioritizes fast sites in search results, which means a slow site gets less organic traffic, which means fewer conversions, which means less revenue to invest in improvements. It is a downward spiral.
 
-In 2023 we can expect even faster and more specialised JS runtimes to launch, including the promising Boil, a runtime specifically designed to reduce cold boot times on WiFi enabled kettles. All of these advancements promise to make the future of botnets a truly exciting one.
+## How we solve this at CSH
+
+Every project we deliver at Couto Software House is built with performance as a first-class requirement:
+
+- **Server-Side Rendering (SSR)** with Next.js ensures your content is visible before JavaScript even loads
+- **Static Generation (SSG)** pre-renders pages at build time so they load instantly from the CDN
+- **Image optimization** with automatic WebP/AVIF conversion, lazy loading, and responsive sizing
+- **Code splitting** ensures users only download the JavaScript they actually need for each page
+- **Edge deployment** on Vercel puts your content physically closer to your users worldwide
+
+The result: Lighthouse scores above 95, sub-second load times, and websites that convert visitors into customers.
+
+![A pilot representing precision and performance in web development](./pilot.jpg)
+
+## The bottom line
+
+Performance is not a technical checkbox. It is the single highest-ROI investment you can make in your digital presence. Every millisecond you shave off your load time translates directly into more engagement, more conversions, and more revenue.
+
+If your website takes more than 2 seconds to load, you are losing customers right now. The question is not whether you can afford to invest in performance — it is whether you can afford not to.

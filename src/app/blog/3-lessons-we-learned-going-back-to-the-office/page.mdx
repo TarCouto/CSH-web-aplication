@@ -1,11 +1,15 @@
+import imageGraduation from './graduation.jpg'
+import imageJars from './jars.jpg'
+import imagePunchClock from './punch-clock.jpg'
+
 export const article = {
-  date: '2023-02-18',
-  title: '3 Lessons We Learned Going Back to the Office',
+  date: '2024-01-22',
+  title: 'How to Choose the Right Frontend Framework for Your Project',
   description:
-    'Earlier this year we made the bold decision to make everyone come back to the office full-time after two years working from a dressing table in the corner of their bedroom.',
+    'React, Next.js, or Angular? The right choice depends on your project requirements, team expertise, and long-term goals. Here is a practical guide.',
   author: {
-    name: 'Couto Software House',
-    role: 'Engineering Team',
+    name: 'Tarcisio Couto',
+    role: 'Founder, CSH',
   },
 }
 
@@ -14,34 +18,73 @@ export const metadata = {
   description: article.description,
 }
 
-## 1. Efficiency is Hard to Measure
+## There is no "best" framework — only the right one
 
-Although almost every practical measure of our productivity decreased significantly after returning to the office, as a management team we felt this incredible uptick in energy. We realised that there is an intangible benefit to seeing everyone's screen at all times, that isn't easily measurable in numbers.
+Every week, a new article declares that one JavaScript framework is better than all the others. The truth is simpler: the best framework is the one that solves your specific problem with the least complexity.
 
-Sure, we tried to recreate this feeling during our remote days with employee monitoring software but we always had this nagging doubt that our developers had hacked their way around it.
+After building 50+ projects with React, Next.js, and Angular, here is what we have learned about when to use each one.
 
-<TopTip>
-  Getting one of those old-timey punch clocks is a great way to monitor
-  attendance while maintaining a fun atmosphere. Expect to hear things like
-  "Back at the coalface today!".
-</TopTip>
+![Choosing the right tools for web development](./graduation.jpg)
 
-![](./punch-clock.jpg)
+## React: when you need maximum flexibility
 
-## 2. Turnover: a Fresh Perspective
+React is a library, not a framework. It gives you the building blocks and lets you choose everything else — routing, state management, data fetching, and build tooling.
 
-We parted ways with almost all of our senior development team within the first month of going back to the office, due to some irreconcilable differences. Stressed and worried, we decided to try turn this into a positive.
+**Choose React when:**
+- You are building a complex single page application (SPA) with heavy client-side interactivity
+- Your team needs flexibility to choose their own architecture
+- You are integrating into an existing application or micro-frontend setup
+- Real-time features like dashboards, chat, or collaborative tools are the core of your product
 
-Luckily for us, it was the same week that CoPilot launched and we were able to replace everyone with five bootcamp graduates all logged into one Github account.
+**Be aware:** React alone does not give you server-side rendering, routing, or image optimization out of the box. You will need to make more decisions upfront, which can slow down smaller teams.
 
-We have been consistently surprised at the fresh energy these new grads brought to our organisation and have since vowed to never hire anyone with more than 3 months experience again.
+## Next.js: when SEO and performance are non-negotiable
 
-![](./graduation.jpg)
+Next.js is React with batteries included. It gives you server-side rendering, static generation, image optimization, API routes, and deployment infrastructure in one package.
 
-## 3. Cost Efficiency
+**Choose Next.js when:**
+- SEO is critical — landing pages, marketing sites, blogs, e-commerce
+- You need the fastest possible load times (SSR + SSG + ISR)
+- Your project mixes static content with dynamic features
+- You want zero-config deployment on Vercel with preview environments
 
-Demand is at an all time low for commercial real-estate, which means it's never been more affordable to cram forty people into an open plan office.
+**Be aware:** Next.js adds complexity with its rendering model. You need to understand when to use server components versus client components, and the learning curve can be steep for teams new to the framework.
 
-What's more, is we've found that we can offer extremely low-cost perks like a snack cupboard or free beer in-lieu of higher salaries. For every foosball table we buy, we find we can offer around 5% less salary per job posting. Our full-time barista is the highest paid employee, after management.
+![Organizing components and architecture decisions](./jars.jpg)
 
-![](./jars.jpg)
+## Angular: when you need structure at scale
+
+Angular is a full framework with strong opinions about how your application should be built. It includes routing, forms, HTTP handling, dependency injection, and testing tools — all maintained by one team at Google.
+
+**Choose Angular when:**
+- You are building a large enterprise application with multiple teams
+- Your project requires strict typing and architecture patterns from day one
+- You need built-in form handling, validation, and complex state management
+- Long-term maintainability is more important than initial development speed
+
+**Be aware:** Angular has a steeper learning curve than React and a heavier initial bundle size. For small projects or simple landing pages, it can be overkill.
+
+## The decision matrix
+
+Here is how we decide at CSH:
+
+| Criteria | React | Next.js | Angular |
+|---|---|---|---|
+| SEO critical | No | Yes | No |
+| Complex SPA | Yes | Moderate | Yes |
+| Enterprise scale | Moderate | Moderate | Yes |
+| Fast prototyping | Yes | Yes | No |
+| Performance | Good | Excellent | Good |
+| Team size | Any | Any | Large |
+
+![Building reliable systems with the right foundation](./punch-clock.jpg)
+
+## Our recommendation
+
+For most projects in 2024, **Next.js is the default choice**. It gives you the best balance of performance, SEO, developer experience, and deployment simplicity.
+
+If you are building a highly interactive SPA where SEO does not matter — a dashboard, an admin panel, a real-time tool — **React with Vite** is faster to set up and gives you more control.
+
+If you are building a large enterprise application with multiple teams and need strict architectural guardrails, **Angular** is the safest bet.
+
+The worst decision is choosing a framework based on hype instead of requirements. Define what your project needs first, then pick the tool that fits.
