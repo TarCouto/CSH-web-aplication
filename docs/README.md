@@ -24,6 +24,7 @@ Documentação técnica da aplicação web institucional da **Couto Software Hou
 | 11 | [Marketplace — hardening](./11-marketplace-hardening.md) | Rate limit, EULA, e-mail, segurança do download |
 | 12 | [Banco de dados (DBA)](./12-database.md) | Schema, RLS, triggers, storage, migrations versionadas |
 | 13 | [Stripe — setup](./13-stripe-setup.md) | Arquitetura Stripe, Products/Prices, webhook, VAT, chaves |
+| 14 | [Auth emails](./14-auth-emails.md) | SMTP Zoho no Auth, templates com domínio couto.software |
 
 ---
 
