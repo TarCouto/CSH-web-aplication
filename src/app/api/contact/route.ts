@@ -1,7 +1,15 @@
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { buildContactEmailHtml, sendEmail } from '@/lib/email'
+
+const budgetLabels: Record<string, string> = {
+  '1': '$1K – $5K',
+  '5': '$5K – $10K',
+  '10': '$10K – $25K',
+  '25': '$25K – $50K',
+  '50': '$50K – $100K',
+  '100': 'More than $100K',
+}
 
 export async function POST(request: Request) {
   try {
@@ -15,33 +23,23 @@ export async function POST(request: Request) {
       )
     }
 
-    const budgetLabels: Record<string, string> = {
-      '1': '$1K – $5K',
-      '5': '$5K – $10K',
-      '10': '$10K – $25K',
-      '25': '$25K – $50K',
-      '50': '$50K – $100K',
-      '100': 'More than $100K',
-    }
+    const budgetLabel = budget ? budgetLabels[budget] || budget : undefined
 
-    await resend.emails.send({
-      from: 'Couto Software House <onboarding@resend.dev>',
-      to: ['tarcisiocouto10@hotmail.com'],
+    await sendEmail({
       subject: `New lead from ${name}${company ? ` at ${company}` : ''}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        ${company ? `<p><strong>Company:</strong> ${company}</p>` : ''}
-        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
-        ${budget ? `<p><strong>Budget:</strong> ${budgetLabels[budget] || budget}</p>` : ''}
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `,
+      html: buildContactEmailHtml({
+        name,
+        email,
+        company,
+        phone,
+        message,
+        budgetLabel,
+      }),
+      replyTo: email,
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to send message' },
       { status: 500 },
