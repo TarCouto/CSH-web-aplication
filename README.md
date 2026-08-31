@@ -1,36 +1,45 @@
-# Studio
+# Couto Software House — Web Application
 
-Studio is a [Tailwind Plus](https://tailwindcss.com/plus) site template built using [Tailwind CSS](https://tailwindcss.com) and [Next.js](https://nextjs.org).
+Site institucional da **Couto Software House** — aplicações web de alta performance.
+
+**Produção:** [https://couto.software](https://couto.software)
+
+## Stack
+
+Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · MDX · Zoho Mail SMTP
 
 ## Getting started
 
-To get started with this template, first install the npm dependencies:
-
 ```bash
 npm install
-```
-
-Next, run the development server:
-
-```bash
+cp .env.example .env.local
+# Configure Zoho SMTP credentials in .env.local
 npm run dev
 ```
 
-Finally, open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Customizing
+## Scripts
 
-You can start editing this template by modifying the files in the `/src` folder. The site will auto-update as you edit these files.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run start` | Production server |
+| `npm run lint` | ESLint |
+
+## Documentation
+
+Full application documentation is in the [`docs/`](./docs/) folder:
+
+- [Index](./docs/README.md) — documentation map
+- [Architecture](./docs/02-architecture.md) — system design
+- [Routes & pages](./docs/03-routes-and-pages.md) — all URLs
+- [Components](./docs/04-components.md) — component inventory
+- [API & integrations](./docs/05-api-and-integrations.md) — forms, email, SEO
+- [Content MDX](./docs/06-content-mdx.md) — blog and case studies
+- [Development guide](./docs/09-development-guide.md) — how to extend
 
 ## License
 
-This site template is a commercial product and is licensed under the [Tailwind Plus license](https://tailwindcss.com/plus/license).
-
-## Learn more
-
-To learn more about the technologies used in this site template, see the following resources:
-
-- [Tailwind CSS](https://tailwindcss.com/docs) - the official Tailwind CSS documentation
-- [Next.js](https://nextjs.org/docs) - the official Next.js documentation
-- [Framer Motion](https://www.framer.com/docs/) - the official Framer Motion documentation
-- [MDX](https://mdxjs.com/) - the official MDX documentation
+Based on [Tailwind Plus Studio](https://tailwindcss.com/plus) template (commercial license).
