@@ -20,6 +20,10 @@ Documentação técnica da aplicação web institucional da **Couto Software Hou
 | 7 | [Estilos e design](./07-styling-and-design.md) | Tailwind v4, tipografia, fontes |
 | 8 | [Ambiente e deploy](./08-environment-and-deployment.md) | Variáveis de ambiente, Vercel, build |
 | 9 | [Guia de desenvolvimento](./09-development-guide.md) | Setup local, convenções, como estender |
+| 10 | [Marketplace — setup](./10-marketplace-setup.md) | Envs, migrations, bucket, integração das peças |
+| 11 | [Marketplace — hardening](./11-marketplace-hardening.md) | Rate limit, EULA, e-mail, segurança do download |
+| 12 | [Banco de dados (DBA)](./12-database.md) | Schema, RLS, triggers, storage, migrations versionadas |
+| 13 | [Stripe — setup](./13-stripe-setup.md) | Arquitetura Stripe, Products/Prices, webhook, VAT, chaves |
 
 ---
 

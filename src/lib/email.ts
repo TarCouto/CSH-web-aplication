@@ -44,16 +44,18 @@ export async function sendEmail({
   subject,
   html,
   replyTo,
+  to,
 }: {
   subject: string
   html: string
   replyTo?: string
+  to?: string | string[]
 }) {
   const transporter = getTransporter()
 
   await transporter.sendMail({
     from: `Couto Software House <${getFromAddress()}>`,
-    to: getToAddresses(),
+    to: to ?? getToAddresses(),
     replyTo,
     subject,
     html,
@@ -92,5 +94,49 @@ export function buildNewsletterEmailHtml({ email }: { email: string }) {
     <h2>New Newsletter Subscription</h2>
     <p><strong>Email:</strong> ${escapeHtml(email)}</p>
     <p>Submitted from the website footer newsletter form.</p>
+  `
+}
+
+export function buildPurchaseEmailHtml({
+  productName,
+  amountLabel,
+  dashboardUrl,
+}: {
+  productName: string
+  amountLabel: string
+  dashboardUrl: string
+}) {
+  return `
+    <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto; color: #171717;">
+      <h2 style="margin-bottom: 8px;">Thank you for your purchase</h2>
+      <p style="color: #525252; margin-top: 0;">
+        Your order with Couto Software House is confirmed.
+      </p>
+      <table style="width: 100%; border-collapse: collapse; margin: 24px 0;">
+        <tr>
+          <td style="padding: 8px 0; color: #525252;">Product</td>
+          <td style="padding: 8px 0; text-align: right; font-weight: 600;">
+            ${escapeHtml(productName)}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #525252;">Amount paid</td>
+          <td style="padding: 8px 0; text-align: right; font-weight: 600;">
+            ${escapeHtml(amountLabel)}
+          </td>
+        </tr>
+      </table>
+      <p style="margin: 24px 0;">
+        <a
+          href="${escapeHtml(dashboardUrl)}"
+          style="display: inline-block; background: #171717; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 9999px;"
+        >
+          Go to your dashboard
+        </a>
+      </p>
+      <p style="color: #525252; font-size: 14px;">
+        Download your product from the dashboard. Each copy includes a traceable license file.
+      </p>
+    </div>
   `
 }

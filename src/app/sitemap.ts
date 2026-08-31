@@ -1,9 +1,12 @@
 import { type MetadataRoute } from 'next'
 
+import { createClient } from '@/lib/supabase/server'
+import { listPublishedProducts } from '@/server/services/products'
+
 const BASE_URL = 'https://couto.software'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const staticEntries: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: new Date(),
@@ -76,5 +79,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/products`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
   ]
+
+  let productEntries: MetadataRoute.Sitemap = []
+
+  try {
+    const supabase = await createClient()
+    const products = await listPublishedProducts(supabase)
+
+    productEntries = products.map((product) => ({
+      url: `${BASE_URL}/products/${product.slug}`,
+      lastModified: new Date(product.updated_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
+  } catch {
+    // Supabase unavailable — static entries only
+  }
+
+  return [...staticEntries, ...productEntries]
 }
