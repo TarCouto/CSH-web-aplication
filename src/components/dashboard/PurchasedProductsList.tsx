@@ -10,15 +10,15 @@ export function PurchasedProductsList({
 }) {
   if (entitlements.length === 0) {
     return (
-      <div className="rounded-4xl bg-neutral-50 px-8 py-12 ring-1 ring-neutral-950/5">
+      <div className="rounded-3xl bg-neutral-50 px-5 py-10 ring-1 ring-neutral-950/5 sm:rounded-4xl sm:px-8 sm:py-12">
         <p className="font-display text-lg font-semibold text-neutral-950">
           No products yet
         </p>
-        <p className="mt-3 max-w-xl text-base text-neutral-600">
+        <p className="mt-3 max-w-xl text-sm text-neutral-600 sm:text-base">
           After you buy a boilerplate, it stays here so you can download it
           again whenever you need.
         </p>
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <Button href="/products">Browse the store</Button>
         </div>
       </div>
@@ -26,7 +26,7 @@ export function PurchasedProductsList({
   }
 
   return (
-    <ul className="divide-y divide-neutral-950/5 overflow-hidden rounded-4xl ring-1 ring-neutral-950/5">
+    <ul className="divide-y divide-neutral-950/5 overflow-hidden rounded-3xl ring-1 ring-neutral-950/5 sm:rounded-4xl">
       {entitlements.map((entitlement) => {
         const remaining =
           entitlement.download_limit - entitlement.download_count
@@ -42,7 +42,7 @@ export function PurchasedProductsList({
         return (
           <li
             key={entitlement.id}
-            className="grid gap-6 bg-white p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8"
+            className="grid gap-4 bg-white p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-6 sm:p-8"
           >
             <div className="min-w-0">
               <h3 className="font-display text-base font-semibold text-neutral-950">
@@ -68,6 +68,7 @@ export function PurchasedProductsList({
               productId={entitlement.product_id}
               disabled={limitReached}
               remaining={limitReached ? undefined : remaining}
+              className="w-full sm:w-auto"
             />
           </li>
         )

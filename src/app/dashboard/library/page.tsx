@@ -1,5 +1,6 @@
 import { type Metadata } from 'next'
 
+import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { PurchasedProductsList } from '@/components/dashboard/PurchasedProductsList'
 import { FadeIn } from '@/components/FadeIn'
 import { createClient } from '@/lib/supabase/server'
@@ -21,21 +22,14 @@ export default async function LibraryPage() {
     : []
 
   return (
-    <FadeIn>
-      <header>
-        <p className="font-display text-base font-semibold text-neutral-950">
-          Library
-        </p>
-        <h1 className="mt-6 font-display text-4xl font-medium tracking-tight text-neutral-950 sm:text-5xl">
-          My products
-        </h1>
-        <p className="mt-4 max-w-2xl text-base text-neutral-600">
-          Every boilerplate you bought lives here. Download it again whenever
-          you want, up to your allowance.
-        </p>
-      </header>
+    <FadeIn className="pt-4 lg:pt-0">
+      <DashboardPageHeader
+        eyebrow="Library"
+        title="My products"
+        description="Every boilerplate you bought lives here. Download it again whenever you want, up to your allowance."
+      />
 
-      <div className="mt-12">
+      <div className="mt-8 sm:mt-12">
         <PurchasedProductsList entitlements={entitlements} />
       </div>
     </FadeIn>

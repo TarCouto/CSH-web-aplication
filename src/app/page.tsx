@@ -17,7 +17,7 @@ import { RootLayout } from '@/components/RootLayout'
 
 function Results() {
   return (
-    <div className="mt-24 rounded-4xl bg-neutral-950 py-20 sm:mt-32 sm:py-32 lg:mt-56">
+    <div className="mt-16 -mx-5 rounded-4xl bg-neutral-950 py-16 sm:mx-0 sm:mt-24 sm:py-32 lg:mt-56">
       <Container>
         <FadeIn>
           <h2 className="font-display text-2xl font-semibold text-white">
@@ -167,12 +167,12 @@ export default async function Home() {
 
   return (
     <RootLayout>
-      <Container className="mt-24 sm:mt-32 md:mt-56">
+      <Container className="mt-16 sm:mt-24 md:mt-32 lg:mt-56">
         <div className="max-w-3xl">
-          <h1 className="font-display text-3xl font-medium tracking-tight text-balance text-neutral-950 sm:text-5xl lg:text-7xl">
+          <h1 className="font-display text-[1.75rem] font-medium leading-tight tracking-tight text-balance text-neutral-950 sm:text-5xl lg:text-7xl">
             High-performance web applications built in Brazil, delivered globally.
           </h1>
-          <p className="mt-6 text-xl text-neutral-600">
+          <p className="mt-5 text-lg leading-relaxed text-neutral-600 sm:mt-6 sm:text-xl">
             We are a software engineering company specializing in fast, modern,
             and conversion-focused digital products — from complex SPAs to
             high-converting landing pages.

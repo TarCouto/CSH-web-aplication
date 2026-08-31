@@ -1,4 +1,5 @@
 import { Button } from '@/components/Button'
+import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { FadeIn } from '@/components/FadeIn'
 import { StatList, StatListItem } from '@/components/StatList'
 import { type EntitlementWithProduct } from '@/server/services/entitlements'
@@ -18,21 +19,14 @@ export function DashboardOverview({
   }, 0)
 
   return (
-    <FadeIn>
-      <header>
-        <p className="font-display text-base font-semibold text-neutral-950">
-          Dashboard
-        </p>
-        <h1 className="mt-6 font-display text-4xl font-medium tracking-tight text-neutral-950 sm:text-5xl">
-          Overview
-        </h1>
-        <p className="mt-4 max-w-2xl text-base text-neutral-600">
-          Your purchased boilerplates, download allowance, and account activity
-          in one place.
-        </p>
-      </header>
+    <FadeIn className="pt-4 lg:pt-0">
+      <DashboardPageHeader
+        eyebrow="Dashboard"
+        title="Overview"
+        description="Your purchased boilerplates, download allowance, and account activity in one place."
+      />
 
-      <div className="mt-12 rounded-4xl bg-white p-8 ring-1 ring-neutral-950/5 sm:p-10">
+      <div className="mt-8 rounded-3xl bg-white p-5 ring-1 ring-neutral-950/5 sm:mt-12 sm:rounded-4xl sm:p-8 lg:p-10">
         <StatList>
           <StatListItem label="Products owned" value={String(productCount)} />
           <StatListItem
@@ -43,16 +37,16 @@ export function DashboardOverview({
         </StatList>
       </div>
 
-      <section className="mt-16 sm:mt-20 rounded-4xl bg-neutral-50 px-8 py-10 ring-1 ring-neutral-950/5">
+      <section className="mt-8 rounded-3xl bg-neutral-50 px-5 py-8 ring-1 ring-neutral-950/5 sm:mt-12 sm:rounded-4xl sm:px-8 sm:py-10 lg:mt-16">
         <h2 className="font-display text-base font-semibold text-neutral-950">
           My products
         </h2>
-        <p className="mt-3 max-w-xl text-base text-neutral-600">
+        <p className="mt-3 max-w-xl text-sm text-neutral-600 sm:text-base">
           {productCount === 0
             ? 'You have not purchased a boilerplate yet. The store is the next step.'
             : `You have ${productCount} product${productCount === 1 ? '' : 's'} ready to download.`}
         </p>
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <Button href={productCount === 0 ? '/products' : '/dashboard/library'}>
             {productCount === 0 ? 'Browse the store' : 'Open my products'}
           </Button>

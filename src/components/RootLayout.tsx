@@ -73,17 +73,19 @@ function Header({
             filled={logoHovered}
           />
         </Link>
-        <div className="flex items-center gap-x-8">
+        <div className="flex items-center gap-x-2 sm:gap-x-4 md:gap-x-8">
           <ThemeToggle invert={invert} />
-          <Button
-            href={isAuthenticated ? '/dashboard' : '/login'}
-            invert={invert}
-          >
-            {isAuthenticated ? 'Dashboard' : 'Log in'}
-          </Button>
-          <Button href="/contact" invert={invert}>
-            Contact us
-          </Button>
+          <div className="hidden items-center gap-x-3 md:flex md:gap-x-4">
+            <Button
+              href={isAuthenticated ? '/dashboard' : '/login'}
+              invert={invert}
+            >
+              {isAuthenticated ? 'Dashboard' : 'Log in'}
+            </Button>
+            <Button href="/contact" invert={invert}>
+              Contact us
+            </Button>
+          </div>
           <button
             ref={toggleRef}
             type="button"
@@ -131,7 +133,7 @@ function NavigationItem({
   return (
     <Link
       href={href}
-      className="group relative isolate -mx-6 bg-neutral-950 px-6 py-10 even:mt-px sm:mx-0 sm:px-0 sm:py-16 sm:odd:pr-16 sm:even:mt-0 sm:even:border-l sm:even:border-neutral-800 sm:even:pl-16"
+      className="group relative isolate -mx-6 bg-neutral-950 px-6 py-8 even:mt-px sm:mx-0 sm:px-0 sm:py-16 sm:odd:pr-16 sm:even:mt-0 sm:even:border-l sm:even:border-neutral-800 sm:even:pl-16"
     >
       {children}
       <span className="absolute inset-y-0 -z-10 w-screen bg-neutral-900 opacity-0 transition group-odd:right-0 group-even:left-0 group-hover:opacity-100" />
@@ -140,8 +142,10 @@ function NavigationItem({
 }
 
 function Navigation() {
+  const isAuthenticated = useIsAuthenticated()
+
   return (
-    <nav className="mt-px font-display text-5xl font-medium tracking-tight text-white">
+    <nav className="mt-px font-display text-3xl font-medium tracking-tight text-white sm:text-5xl">
       <NavigationRow>
         <NavigationItem href="/work">Our Work</NavigationItem>
         <NavigationItem href="/about">About Us</NavigationItem>
@@ -153,6 +157,14 @@ function Navigation() {
       <NavigationRow>
         <NavigationItem href="/products">Products</NavigationItem>
         <NavigationItem href="/contact">Contact us</NavigationItem>
+      </NavigationRow>
+      <NavigationRow>
+        <NavigationItem href={isAuthenticated ? '/dashboard' : '/login'}>
+          {isAuthenticated ? 'Dashboard' : 'Log in'}
+        </NavigationItem>
+        {!isAuthenticated ? (
+          <NavigationItem href="/signup">Sign up</NavigationItem>
+        ) : null}
       </NavigationRow>
     </nav>
   )
@@ -166,9 +178,9 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <header>
+      <header className="relative z-50">
         <div
-          className="absolute top-2 right-0 left-0 z-40 pt-14"
+          className="absolute top-0 right-0 left-0 pt-6 sm:top-2 sm:pt-14"
           aria-hidden={expanded ? 'true' : undefined}
           inert={expanded ? true : undefined}
         >
@@ -189,14 +201,14 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
         <div
           id={panelId}
           className={clsx(
-            'relative z-50 overflow-hidden bg-neutral-950 pt-2 transition-[height] duration-300',
-            expanded ? 'h-auto' : 'h-2',
+            'absolute inset-x-0 top-0 overflow-hidden bg-neutral-950 transition-[max-height] duration-300 ease-in-out',
+            expanded ? 'max-h-[200vh]' : 'max-h-0',
           )}
           aria-hidden={expanded ? undefined : 'true'}
           inert={expanded ? undefined : true}
         >
           <div className="bg-neutral-800">
-            <div className="bg-neutral-950 pt-14 pb-16">
+            <div className="bg-neutral-950 pt-6 pb-10 sm:pt-14 sm:pb-16">
               <Header
                 invert
                 panelId={panelId}
@@ -237,8 +249,8 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="relative flex flex-auto overflow-x-hidden bg-white pt-14">
-        <div className="relative isolate flex w-full flex-col pt-9">
+      <div className="relative flex flex-auto overflow-x-hidden bg-white pt-16 sm:pt-14">
+        <div className="relative isolate flex w-full flex-col pt-6 sm:pt-9">
           <main className="w-full flex-auto">{children}</main>
 
           <Footer />

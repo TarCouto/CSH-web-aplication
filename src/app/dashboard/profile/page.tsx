@@ -1,5 +1,6 @@
 import { type Metadata } from 'next'
 
+import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { ProfileForm } from '@/components/dashboard/ProfileForm'
 import { FadeIn } from '@/components/FadeIn'
 import { createClient } from '@/lib/supabase/server'
@@ -19,21 +20,14 @@ export default async function ProfilePage() {
   const profile = user ? await getProfile(supabase, user.id) : null
 
   return (
-    <FadeIn>
-      <header>
-        <p className="font-display text-base font-semibold text-neutral-950">
-          Account
-        </p>
-        <h1 className="mt-6 font-display text-4xl font-medium tracking-tight text-neutral-950 sm:text-5xl">
-          Profile
-        </h1>
-        <p className="mt-4 max-w-2xl text-base text-neutral-600">
-          Your name is stored in your profile. Email comes from your login and
-          cannot be changed here.
-        </p>
-      </header>
+    <FadeIn className="pt-4 lg:pt-0">
+      <DashboardPageHeader
+        eyebrow="Account"
+        title="Profile"
+        description="Your name is stored in your profile. Email comes from your login and cannot be changed here."
+      />
 
-      <div className="mt-12 rounded-4xl bg-white p-8 ring-1 ring-neutral-950/5 sm:p-10">
+      <div className="mt-8 rounded-3xl bg-white p-5 ring-1 ring-neutral-950/5 sm:mt-12 sm:rounded-4xl sm:p-8 lg:p-10">
         {user && (
           <ProfileForm
             userId={user.id}
