@@ -9,9 +9,10 @@ export async function createCheckoutSession(
     userId: string
     userEmail: string
     appUrl: string
+    customerId?: string | null
   },
 ): Promise<{ url: string | null }> {
-  const { product, userId, userEmail, appUrl } = params
+  const { product, userId, userEmail, appUrl, customerId } = params
 
   if (!product.stripe_price_id) {
     throw new Error(`Product "${product.name}" is missing a Stripe price ID`)
@@ -22,7 +23,9 @@ export async function createCheckoutSession(
     line_items: [{ price: product.stripe_price_id, quantity: 1 }],
     success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${appUrl}/products/${product.slug}`,
-    customer_email: userEmail,
+    ...(customerId
+      ? { customer: customerId }
+      : { customer_email: userEmail }),
     client_reference_id: userId,
     metadata: {
       userId,

@@ -37,6 +37,32 @@ Fluxo de dados: `auth.users` (login) → `profiles` (criado por trigger) → com
 
 ---
 
+## Orientação: tela → tabela
+
+Cada superfície do dashboard lê/escreve uma responsabilidade. Não misturamos “compra” com “direito de download”.
+
+| Tela / fluxo | Lê | Escreve | Pergunta que responde |
+|--------------|----|---------|------------------------|
+| Signup / login | `auth.users` | `profiles` (trigger) | Quem é a conta? |
+| Profile | `profiles` | `profiles.full_name` | Qual o nome? |
+| Billing | `profiles.stripe_customer_id` | mesmo campo (service role) | Qual o Customer Stripe? |
+| Checkout | `products`, `profiles` | Stripe + depois webhook | Qual preço e qual customer? |
+| Webhook pago | — | `orders` + `entitlements` (+ `profiles.stripe_customer_id`) | A compra foi confirmada? |
+| Purchases | `orders` ⋈ `products` | — | Qual template, quando, quanto? |
+| My products | `entitlements` ⋈ `products` | — | O que ele pode baixar? |
+| Download ZIP | `entitlements`, `products` | `downloads` + `entitlements.download_count` | Pode baixar agora? Quem baixou? |
+| Store | `products` (`status = published`) | — | O que está à venda? |
+
+**Dois registros por venda (intencional):**
+- `orders` = fato financeiro (valor, moeda, data, session Stripe, status).
+- `entitlements` = direito de acesso (limite e contagem de download). Unique `(user_id, product_id)`: um slot na biblioteca por produto.
+
+O ZIP **não** fica no Postgres. Fica no bucket privado `storage.products`; `products.storage_path` é só o caminho.
+
+Inspeção ao vivo: `node scripts/db-map.mjs`
+
+---
+
 ## Tabelas
 
 ### `profiles`
@@ -46,7 +72,8 @@ Perfil público do usuário, espelha `auth.users`. Criado automaticamente no sig
 |--------|------|--------|
 | `id` | uuid | PK, FK → `auth.users(id)` on delete cascade |
 | `email` | text | preenchido pelo trigger |
-| `full_name` | text | opcional |
+| `full_name` | text | opcional — editável no dashboard |
+| `stripe_customer_id` | text | unique, opcional — Customer Stripe para checkout reutilizável e Customer Portal |
 | `created_at` | timestamptz | default `now()` |
 
 ### `products`
@@ -168,6 +195,7 @@ As migrations são arquivos SQL em `supabase/migrations/`, aplicados em ordem al
 |---------|----------|
 | `0001_init.sql` | tabelas, RLS, triggers, funções |
 | `0002_storage.sql` | bucket privado `products` |
+| `0003_profile_billing.sql` | `profiles.stripe_customer_id` |
 
 ### Runner
 
@@ -198,10 +226,11 @@ Rodar de novo é seguro — migrations já aplicadas aparecem como `skip`.
 
 ### Inspeção do schema
 
-`scripts/db-inspect.mjs` (read-only) lista tabelas, políticas RLS e buckets:
+`scripts/db-inspect.mjs` (read-only) lista tabelas, políticas RLS e buckets. `scripts/db-map.mjs` lista colunas, FKs, contagens e migrations aplicadas:
 
 ```bash
 node scripts/db-inspect.mjs
+node scripts/db-map.mjs
 ```
 
 ---

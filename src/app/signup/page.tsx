@@ -1,11 +1,15 @@
 import { type Metadata } from 'next'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
 import { SignupForm } from '@/components/auth/SignupForm'
 import { Container } from '@/components/Container'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
+import { safeRedirectPath } from '@/lib/auth'
+import { isSupabaseConfigured } from '@/lib/env'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
   title: 'Sign up',
@@ -18,9 +22,21 @@ export default async function SignupPage({
 }: {
   searchParams: Promise<{ redirect?: string }>
 }) {
-  const { redirect } = await searchParams
-  const loginHref = redirect
-    ? `/login?redirect=${encodeURIComponent(redirect)}`
+  const { redirect: redirectTo } = await searchParams
+
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (user) {
+      redirect(safeRedirectPath(redirectTo))
+    }
+  }
+
+  const loginHref = redirectTo
+    ? `/login?redirect=${encodeURIComponent(redirectTo)}`
     : '/login'
 
   return (

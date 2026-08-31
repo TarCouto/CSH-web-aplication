@@ -30,6 +30,10 @@ export const env = {
   downloadLimit: Number(process.env.DOWNLOAD_LIMIT ?? 5),
 }
 
+export function isStripeConfigured() {
+  return Boolean(process.env.STRIPE_SECRET_KEY)
+}
+
 export function getPublicSupabaseConfig() {
   return {
     url: required('NEXT_PUBLIC_SUPABASE_URL', env.supabase.url),

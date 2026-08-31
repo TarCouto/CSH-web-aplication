@@ -1,6 +1,11 @@
 import { type Metadata } from 'next'
 
+import { AuthSessionProvider } from '@/components/auth/AuthSessionProvider'
 import { JsonLd } from '@/components/JsonLd'
+import { ThemeProvider } from '@/components/theme/ThemeProvider'
+import { themeInitScript } from '@/components/theme/theme-init'
+import { isSupabaseConfigured } from '@/lib/env'
+import { createClient } from '@/lib/supabase/server'
 import '@/styles/tailwind.css'
 
 const BASE_URL = 'https://couto.software'
@@ -47,11 +52,26 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  let isAuthenticated = false
+
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    isAuthenticated = Boolean(user)
+  }
+
   return (
     <html lang="en" className="h-full bg-white text-base antialiased overflow-x-hidden" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="flex min-h-full flex-col overflow-x-hidden" suppressHydrationWarning>
-        <JsonLd
+        <ThemeProvider>
+          <AuthSessionProvider isAuthenticated={isAuthenticated}>
+          <JsonLd
           data={{
             '@context': 'https://schema.org',
             '@type': 'Organization',
@@ -75,7 +95,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             ],
           }}
         />
-        {children}
+            {children}
+          </AuthSessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

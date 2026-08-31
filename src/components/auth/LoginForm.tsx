@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/Button'
 import { FadeIn } from '@/components/FadeIn'
-import { createClient } from '@/lib/supabase/client'
 
 function TextInput({
   label,
@@ -48,14 +47,16 @@ export function LoginForm() {
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    const supabase = createClient()
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
     })
 
-    if (signInError) {
-      setError(signInError.message)
+    const data = (await response.json()) as { error?: string }
+
+    if (!response.ok) {
+      setError(data.error ?? 'Invalid email or password.')
       setLoading(false)
       return
     }

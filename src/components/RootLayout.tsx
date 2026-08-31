@@ -4,12 +4,14 @@ import { createContext, useContext, useId, useRef, useState } from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
 
+import { useIsAuthenticated } from '@/components/auth/AuthSessionProvider'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Footer } from '@/components/Footer'
 import { Logo, Logomark } from '@/components/Logo'
 import { Offices } from '@/components/Offices'
 import { SocialMedia } from '@/components/SocialMedia'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 const RootLayoutContext = createContext<{
   logoHovered: boolean
@@ -49,6 +51,7 @@ function Header({
   invert?: boolean
 }) {
   let { logoHovered, setLogoHovered } = useContext(RootLayoutContext)!
+  const isAuthenticated = useIsAuthenticated()
 
   return (
     <Container>
@@ -71,8 +74,12 @@ function Header({
           />
         </Link>
         <div className="flex items-center gap-x-8">
-          <Button href="/login" invert={invert}>
-            Log in
+          <ThemeToggle invert={invert} />
+          <Button
+            href={isAuthenticated ? '/dashboard' : '/login'}
+            invert={invert}
+          >
+            {isAuthenticated ? 'Dashboard' : 'Log in'}
           </Button>
           <Button href="/contact" invert={invert}>
             Contact us

@@ -4,7 +4,25 @@ import type Stripe from 'stripe'
 import { buildPurchaseEmailHtml, sendEmail } from '@/lib/email'
 import { env } from '@/lib/env'
 import { formatPrice } from '@/lib/money'
-import { type Database } from '@/lib/supabase/types'
+import { type Database, type Order, type Product } from '@/lib/supabase/types'
+
+export type OrderWithProduct = Order & {
+  product: Pick<Product, 'id' | 'slug' | 'name'>
+}
+
+export async function listUserOrders(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+): Promise<OrderWithProduct[]> {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*, product:products(id, slug, name)')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error || !data) return []
+  return data as OrderWithProduct[]
+}
 
 function slugify(value: string): string {
   return value
@@ -89,6 +107,18 @@ export async function fulfillCheckoutSession(
 
   if (entitlementError) {
     throw entitlementError
+  }
+
+  const customerId =
+    typeof session.customer === 'string'
+      ? session.customer
+      : session.customer?.id
+
+  if (customerId) {
+    await supabase
+      .from('profiles')
+      .update({ stripe_customer_id: customerId })
+      .eq('id', userId)
   }
 
   const buyerEmail = session.customer_details?.email

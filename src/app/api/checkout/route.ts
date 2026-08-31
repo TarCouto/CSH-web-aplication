@@ -3,7 +3,10 @@ import { NextResponse } from 'next/server'
 import { env } from '@/lib/env'
 import { getStripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { getOrCreateStripeCustomer } from '@/server/services/billing'
 import { createCheckoutSession } from '@/server/services/checkout'
+import { getProfile } from '@/server/services/profiles'
 
 export const runtime = 'nodejs'
 
@@ -36,11 +39,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 })
     }
 
-    const { url } = await createCheckoutSession(getStripe(), {
+    const stripe = getStripe()
+    const service = createServiceClient()
+    const profile = await getProfile(service, user.id)
+    const customerId = user.email
+      ? await getOrCreateStripeCustomer(stripe, service, {
+          userId: user.id,
+          email: user.email,
+          fullName: profile?.full_name,
+          existingCustomerId: profile?.stripe_customer_id,
+        })
+      : null
+
+    const { url } = await createCheckoutSession(stripe, {
       product,
       userId: user.id,
       userEmail: user.email!,
       appUrl: env.appUrl,
+      customerId,
     })
 
     return NextResponse.json({ url })
