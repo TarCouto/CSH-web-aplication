@@ -66,11 +66,22 @@ Use `{{ .SiteURL }}` + `{{ .TokenHash }}` apontando para páginas de **confirma�
 
 Links antigos com `/auth/confirm` redirecionam para a página correta **sem** consumir o token.
 
+### PKCE vs. token OTP cross-device
+
+O client `@supabase/ssr` (`createBrowserClient`/`createServerClient`) **força `flowType: 'pkce'`** e não permite override. Um `signUp` feito por esse client gera um `token_hash` com prefixo **`pkce_`**, que só pode ser verificado com o **code_verifier** (cookie preso ao browser/dispositivo que iniciou o cadastro). Abrir o link em webmail, celular ou outro browser → sem code_verifier → **403 no `/auth/v1/verify`**.
+
+Por isso:
+
+- O `signUp` roda no servidor (`POST /api/auth/signup`) usando um client **não-PKCE** (`src/lib/supabase/auth-otp-client.ts`, `@supabase/supabase-js` com `flowType: 'implicit'`). Isso gera um **token OTP normal** (sem `pkce_`), verificável de qualquer dispositivo.
+- A verificação (`POST /api/auth/confirm`) usa o mesmo client não-PKCE — `verifyOtp` não precisa de code_verifier para tokens comuns.
+- Se futuramente forem ativados **magic link** ou **reset password**, gere-os também por um client não-PKCE para manter o link cross-device.
+
 Fluxo:
 
-1. O usuário abre o link → página com botão **Confirm my email** (`/signup/confirm` ou `/confirm`).
-2. Ao clicar, `POST /api/auth/confirm` chama `verifyOtp({ type, token_hash })`.
-3. Sucesso → redirect para `next` (sanitizado com `safeRedirectPath`).
+1. Cadastro → `POST /api/auth/signup` (client não-PKCE) → e-mail com `token_hash` comum.
+2. O usuário abre o link → página com botão **Confirm my email** (`/signup/confirm` ou `/confirm`).
+3. Ao clicar, `POST /api/auth/confirm` chama `verifyOtp({ type, token_hash })`.
+4. Sucesso → redirect para `next` (sanitizado com `safeRedirectPath`).
 
 | Resultado | Destino (signup) | Destino (outros fluxos) |
 |-----------|------------------|------------------------|

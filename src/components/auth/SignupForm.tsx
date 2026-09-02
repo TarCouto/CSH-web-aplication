@@ -1,11 +1,9 @@
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/Button'
 import { FadeIn } from '@/components/FadeIn'
-import { createClient } from '@/lib/supabase/client'
 
 function TextInput({
   label,
@@ -33,8 +31,6 @@ function TextInput({
 }
 
 export function SignupForm() {
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
@@ -55,27 +51,27 @@ export function SignupForm() {
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    const supabase = createClient()
-    const confirmNext = redirect
-      ? `/signup/confirmed?redirect=${encodeURIComponent(redirect)}`
-      : '/signup/confirmed'
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
 
-    const { error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: new URL(confirmNext, window.location.origin).toString(),
-      },
-    })
+      const data = (await response.json()) as { error?: string }
 
-    if (signUpError) {
-      setError(signUpError.message)
+      if (!response.ok) {
+        setError(data.error ?? 'Could not create your account.')
+        setLoading(false)
+        return
+      }
+
+      setConfirmed(true)
       setLoading(false)
-      return
+    } catch {
+      setError('Could not create your account. Please try again.')
+      setLoading(false)
     }
-
-    setConfirmed(true)
-    setLoading(false)
   }
 
   if (confirmed) {

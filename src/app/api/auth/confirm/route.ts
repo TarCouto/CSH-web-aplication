@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server'
 
 import { safeRedirectPath } from '@/lib/auth'
-import { createClient } from '@/lib/supabase/server'
+import { createOtpClient } from '@/lib/supabase/auth-otp-client'
 import {
   parseOtpType,
   parseTokenHash,
   verifyEmailOtp,
 } from '@/lib/verify-email-otp'
+
+export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
   let body: { token_hash?: string; type?: string; next?: string }
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid confirmation link' }, { status: 400 })
   }
 
-  const supabase = await createClient()
+  const supabase = createOtpClient()
   const result = await verifyEmailOtp(
     supabase,
     tokenHash,
