@@ -24,6 +24,8 @@ Todas usam `RootLayout` como shell (header + footer).
 | `/confirm` | `src/app/confirm/page.tsx` | Confirm your request | Confirmação manual (magic link, reset password) |
 | `/signup/confirmed` | `src/app/signup/confirmed/page.tsx` | Email confirmed | Sucesso pós-confirmação de e-mail |
 | `/signup/confirm-failed` | `src/app/signup/confirm-failed/page.tsx` | Confirmation failed | Erro na confirmação — tentar cadastro de novo |
+| `/checkout/success` | `src/app/checkout/success/page.tsx` | Checkout complete | Obrigado + download do ZIP |
+| `/checkout/cancel` | `src/app/checkout/cancel/page.tsx` | Checkout canceled | Pagamento abortado |
 
 ---
 

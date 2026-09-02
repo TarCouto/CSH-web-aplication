@@ -116,7 +116,7 @@ Vender **produto digital** para a UE tem regras de VAT:
 3. Defina o **tax behavior** dos Prices (inclusive/exclusive) de forma consistente.
 4. Registre-se onde for obrigado (ex.: **VAT OSS** para vendas B2C intra-UE) — confirme com contador.
 
-> **Nota de implementação:** para o Stripe Tax funcionar no nosso checkout, é preciso habilitar `automatic_tax: { enabled: true }` e `tax_id_collection: { enabled: true }` em `createCheckoutSession` (`src/server/services/checkout.ts`). Isso é uma pequena evolução de código — fazer quando decidir ligar o Stripe Tax.
+> **Nota de implementação:** o Checkout já envia `automatic_tax: { enabled: true }`, `tax_id_collection: { enabled: true }`, `invoice_creation: { enabled: true }` e `billing_address_collection: 'required'`. Sem o **Stripe Tax** ligado no Dashboard, a criação da Session **falha**. Ative Tax (Test e Live) antes de vender.
 
 ---
 
@@ -135,7 +135,7 @@ O Checkout mostra automaticamente os métodos elegíveis por país/moeda. Não p
 
 - **Settings → Branding:** logo, cor, ícone. Aparece no Checkout hospedado e nos recibos.
 - **Statement descriptor:** como aparece na fatura do cartão (ex.: `COUTO SOFTWARE`).
-- **Customer emails:** ative recibos automáticos do Stripe (complementa nosso e-mail de confirmação via Zoho).
+- **Customer emails:** ative **Successful payments** e e-mails de **invoice**. O Checkout gera fatura (`invoice_creation`); o Stripe envia o PDF. O e-mail Zoho continua só como “seu produto está no dashboard”.
 
 ---
 
@@ -169,8 +169,9 @@ Ao ir para produção, crie o endpoint de webhook **em Live**, pegue o `whsec_` 
 - [ ] 1º Product + Price (EUR, one-time) em Test
 - [ ] Webhook Test apontando para `/api/stripe/webhook` com os 5 eventos
 - [ ] `pk_test`, `sk_test`, `whsec` no `.env.local`
-- [ ] Fluxo testado: checkout → webhook cria order+entitlement → download
-- [ ] (Opcional) Stripe Tax + coleta de VAT ID
+- [ ] Stripe Tax ligado (Test) + Prices com tax behavior
+- [ ] Customer emails: Successful payments + invoices
+- [ ] Fluxo testado: checkout pede endereço e VAT ID → fatura Stripe + e-mail Zoho → download
 - [ ] Onboarding/KYC + conta bancária para payouts
 - [ ] Repetir chaves/webhook em **Live** e configurar na Vercel
 
