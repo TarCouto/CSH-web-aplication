@@ -6,6 +6,7 @@ import { Container } from '@/components/Container'
 import { FadeIn, FadeInStagger } from '@/components/FadeIn'
 import { SectionIntro } from '@/components/SectionIntro'
 import { formatDate } from '@/lib/formatDate'
+import { BAND_PT } from '@/lib/spacing'
 
 function ArrowIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -69,14 +70,14 @@ export function PageLinks({
   className?: string
 }) {
   return (
-    <div className={clsx('relative pt-24 sm:pt-32 lg:pt-40', className)}>
+    <div className={clsx('relative', BAND_PT, className)}>
       <div className="absolute inset-x-0 top-0 -z-10 h-[884px] overflow-hidden rounded-t-4xl bg-linear-to-b from-neutral-50" />
 
       <SectionIntro title={title} smaller>
         {intro && <p>{intro}</p>}
       </SectionIntro>
 
-      <Container className={intro ? 'mt-24' : 'mt-16'}>
+      <Container className={intro ? 'mt-10 sm:mt-16' : 'mt-8 sm:mt-12'}>
         <FadeInStagger className="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
           {pages.map((page) => (
             <FadeIn key={page.href}>

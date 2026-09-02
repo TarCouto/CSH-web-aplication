@@ -6,6 +6,7 @@ import { FadeIn } from '@/components/FadeIn'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
 import { NO_INDEX_ROBOTS } from '@/lib/metadata'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 
 export const metadata: Metadata = {
   title: 'Email confirmed',
@@ -23,7 +24,7 @@ export default function SignupConfirmedPage() {
         </p>
       </PageIntro>
 
-      <Container className="mt-16 sm:mt-24">
+      <Container className={AFTER_INTRO_Y}>
         <FadeIn className="max-w-lg">
           <ol className="list-decimal space-y-3 pl-5 text-base text-neutral-600">
             <li>Click the button below to open the login page.</li>

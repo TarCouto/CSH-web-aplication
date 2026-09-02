@@ -2,6 +2,7 @@ import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
 import { FadeIn } from '@/components/FadeIn'
+import { PAGE_INTRO_Y } from '@/lib/spacing'
 
 export function PageIntro({
   eyebrow,
@@ -16,7 +17,7 @@ export function PageIntro({
 }) {
   return (
     <Container
-      className={clsx('mt-24 sm:mt-32 lg:mt-40', centered && 'text-center')}
+      className={clsx(PAGE_INTRO_Y, centered && 'text-center')}
     >
       <FadeIn>
         <h1>

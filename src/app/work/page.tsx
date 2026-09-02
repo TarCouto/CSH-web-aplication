@@ -14,6 +14,7 @@ import logoCsh from '@/images/csh-logomark.svg'
 import { formatDate } from '@/lib/formatDate'
 import { type CaseStudy, type MDXEntry, loadCaseStudies } from '@/lib/mdx'
 import { RootLayout } from '@/components/RootLayout'
+import { AFTER_INTRO_Y, SECTION_Y } from '@/lib/spacing'
 
 function CaseStudies({
   caseStudies,
@@ -21,7 +22,7 @@ function CaseStudies({
   caseStudies: Array<MDXEntry<CaseStudy>>
 }) {
   return (
-    <Container className="mt-40">
+    <Container className={AFTER_INTRO_Y}>
       <FadeIn>
         <h2 className="font-display text-2xl font-semibold text-neutral-950">
           Case studies
@@ -124,7 +125,7 @@ export default async function Work() {
       <CaseStudies caseStudies={caseStudies} />
 
       <Testimonial
-        className="mt-24 sm:mt-32 lg:mt-40"
+        className={SECTION_Y}
         client={{ name: 'Couto Software House', logo: logoCsh }}
       >
         A professionally built website is not an expense — it is the highest-ROI

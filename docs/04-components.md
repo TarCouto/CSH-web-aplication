@@ -10,7 +10,7 @@ Todos os componentes ficam em `src/components/`.
 |------------|---------|------|-----------|
 | `RootLayout` | `RootLayout.tsx` | client | Shell: header fixo, menu fullscreen, nav, `<main>`, footer |
 | `Footer` | `Footer.tsx` | server | Navegação em colunas, newsletter, logo, copyright |
-| `Container` | `Container.tsx` | server | Wrapper responsivo com max-width |
+| `Container` | `Container.tsx` | server | Wrapper responsivo: `max-w-7xl` + gutter `px-5 sm:px-6 lg:px-8` |
 | `Logo` | `Logo.tsx` | server | Marca CSH com hover fill |
 | `Logomark` | `Logo.tsx` | server | Ícone da marca (sem texto) |
 

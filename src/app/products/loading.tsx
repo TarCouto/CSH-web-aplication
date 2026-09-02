@@ -1,5 +1,6 @@
 import { Container } from '@/components/Container'
 import { RootLayout } from '@/components/RootLayout'
+import { PAGE_INTRO_Y } from '@/lib/spacing'
 
 function SkeletonBlock({ className }: { className?: string }) {
   return (
@@ -12,7 +13,7 @@ function SkeletonBlock({ className }: { className?: string }) {
 export default function ProductsLoading() {
   return (
     <RootLayout>
-      <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <Container className={PAGE_INTRO_Y}>
         <SkeletonBlock className="h-8 w-48" />
         <SkeletonBlock className="mt-6 h-12 w-full max-w-2xl" />
         <SkeletonBlock className="mt-4 h-20 w-full max-w-xl" />

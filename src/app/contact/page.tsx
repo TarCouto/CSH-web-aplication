@@ -9,6 +9,7 @@ import { Offices } from '@/components/Offices'
 import { PageIntro } from '@/components/PageIntro'
 import { SocialMedia } from '@/components/SocialMedia'
 import { RootLayout } from '@/components/RootLayout'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 
 function ContactDetails() {
   return (
@@ -76,7 +77,7 @@ export default function Contact() {
         <p>Ready to start your next project? We would love to hear from you.</p>
       </PageIntro>
 
-      <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <Container className={AFTER_INTRO_Y}>
         <div className="grid grid-cols-1 gap-x-8 gap-y-24 lg:grid-cols-2">
           <ContactForm />
           <ContactDetails />

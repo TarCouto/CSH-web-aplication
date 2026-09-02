@@ -7,6 +7,7 @@ import { PageLinks } from '@/components/PageLinks'
 import { RootLayout } from '@/components/RootLayout'
 import { formatDate } from '@/lib/formatDate'
 import { type Article, type MDXEntry, loadArticles } from '@/lib/mdx'
+import { AFTER_INTRO_Y, PAGE_INTRO_Y } from '@/lib/spacing'
 
 export default async function BlogArticleWrapper({
   article,
@@ -38,7 +39,7 @@ export default async function BlogArticleWrapper({
           },
         }}
       />
-      <Container as="article" className="mt-24 sm:mt-32 lg:mt-40">
+      <Container as="article" className={PAGE_INTRO_Y}>
         <FadeIn>
           <header className="mx-auto flex max-w-5xl flex-col text-center">
             <h1 className="mt-6 font-display text-5xl font-medium tracking-tight text-balance text-neutral-950 sm:text-6xl">
@@ -57,7 +58,7 @@ export default async function BlogArticleWrapper({
         </FadeIn>
 
         <FadeIn>
-          <MDXComponents.wrapper className="mt-24 sm:mt-32 lg:mt-40">
+          <MDXComponents.wrapper className={AFTER_INTRO_Y}>
             {children}
           </MDXComponents.wrapper>
         </FadeIn>
@@ -65,7 +66,6 @@ export default async function BlogArticleWrapper({
 
       {moreArticles.length > 0 && (
         <PageLinks
-          className="mt-24 sm:mt-32 lg:mt-40"
           title="More articles"
           pages={moreArticles}
         />

@@ -8,6 +8,7 @@ import { PageIntro } from '@/components/PageIntro'
 import { PageLinks } from '@/components/PageLinks'
 import { RootLayout } from '@/components/RootLayout'
 import { type CaseStudy, type MDXEntry, loadCaseStudies } from '@/lib/mdx'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 
 export default async function CaseStudyLayout({
   caseStudy,
@@ -36,17 +37,17 @@ export default async function CaseStudyLayout({
           serviceType: caseStudy.service,
         }}
       />
-      <article className="mt-24 sm:mt-32 lg:mt-40">
+      <article>
         <header>
           <PageIntro eyebrow="Case Study" title={caseStudy.title} centered>
             <p>{caseStudy.description}</p>
           </PageIntro>
 
           <FadeIn>
-            <div className="mt-24 border-t border-neutral-200 bg-white/50 sm:mt-32 lg:mt-40">
+            <div className={`${AFTER_INTRO_Y} border-t border-neutral-200 bg-white/50`}>
               <Container>
                 <div className="mx-auto max-w-5xl">
-                  <dl className="-mx-6 grid grid-cols-1 text-sm text-neutral-950 sm:mx-0 sm:grid-cols-3">
+                  <dl className="grid grid-cols-1 text-sm text-neutral-950 sm:grid-cols-3">
                     <div className="border-t border-neutral-200 px-6 py-4 first:border-t-0 sm:border-t-0 sm:border-l">
                       <dt className="font-semibold">Client</dt>
                       <dd>{caseStudy.client}</dd>
@@ -82,7 +83,7 @@ export default async function CaseStudyLayout({
           </FadeIn>
         </header>
 
-        <Container className="mt-24 sm:mt-32 lg:mt-40">
+        <Container className={AFTER_INTRO_Y}>
           <FadeIn>
             <MDXComponents.wrapper>{children}</MDXComponents.wrapper>
           </FadeIn>
@@ -91,7 +92,6 @@ export default async function CaseStudyLayout({
 
       {moreCaseStudies.length > 0 && (
         <PageLinks
-          className="mt-24 sm:mt-32 lg:mt-40"
           title="More case studies"
           pages={moreCaseStudies}
         />

@@ -5,6 +5,7 @@ import { Container } from '@/components/Container'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
 import { NO_INDEX_ROBOTS } from '@/lib/metadata'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 
 export const metadata: Metadata = {
   title: 'Checkout complete',
@@ -30,7 +31,7 @@ export default async function CheckoutSuccessPage({
         </p>
       </PageIntro>
 
-      <Container className="mt-16">
+      <Container className={AFTER_INTRO_Y}>
         <Button href="/dashboard">Go to your products</Button>
       </Container>
     </RootLayout>

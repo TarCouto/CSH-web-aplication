@@ -14,6 +14,7 @@ import imageLaptop from '@/images/laptop.jpg'
 import imageMeeting from '@/images/meeting.jpg'
 import imageWhiteboard from '@/images/whiteboard.jpg'
 import { RootLayout } from '@/components/RootLayout'
+import { AFTER_INTRO_Y, BAND_PT } from '@/lib/spacing'
 
 function Section({
   title,
@@ -181,7 +182,7 @@ function Deliver() {
 
 function Values() {
   return (
-    <div className="relative mt-24 pt-24 sm:mt-32 sm:pt-32 lg:mt-40 lg:pt-40">
+    <div className={`relative ${BAND_PT}`}>
       <div className="absolute inset-x-0 top-0 -z-10 h-[884px] overflow-hidden rounded-t-4xl bg-linear-to-b from-neutral-50" />
 
       <SectionIntro
@@ -194,7 +195,7 @@ function Values() {
         </p>
       </SectionIntro>
 
-      <Container className="mt-24">
+      <Container className="mt-10 sm:mt-16">
         <GridList>
           <GridListItem title="Performance-first">
             Every line of code is written with performance in mind. We optimize
@@ -250,7 +251,7 @@ export default function Process() {
         </p>
       </PageIntro>
 
-      <div className="mt-24 space-y-24 [counter-reset:section] sm:mt-32 sm:space-y-32 lg:mt-40 lg:space-y-40">
+      <div className={`${AFTER_INTRO_Y} space-y-16 [counter-reset:section] sm:space-y-24 lg:space-y-32`}>
         <Discover />
         <Build />
         <Deliver />

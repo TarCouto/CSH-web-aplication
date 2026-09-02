@@ -9,10 +9,11 @@ import { SectionIntro } from '@/components/SectionIntro'
 import { StatList, StatListItem } from '@/components/StatList'
 import { loadArticles } from '@/lib/mdx'
 import { RootLayout } from '@/components/RootLayout'
+import { AFTER_INTRO_Y, SECTION_Y } from '@/lib/spacing'
 
 function Culture() {
   return (
-    <div className="mt-24 rounded-4xl bg-neutral-950 py-24 sm:mt-32 lg:mt-40 lg:py-32">
+    <div className={`${SECTION_Y} rounded-4xl bg-neutral-950 py-16 sm:py-24 lg:py-32`}>
       <SectionIntro
         eyebrow="Our culture"
         title="Performance-driven, people-first."
@@ -82,7 +83,7 @@ export default async function About() {
           </p>
         </div>
       </PageIntro>
-      <Container className="mt-16">
+      <Container className={AFTER_INTRO_Y}>
         <StatList>
           <StatListItem value="4+" label="Years of experience" />
           <StatListItem value="50+" label="Projects delivered" />
@@ -93,7 +94,6 @@ export default async function About() {
       <Culture />
 
       <PageLinks
-        className="mt-24 sm:mt-32 lg:mt-40"
         title="From the blog"
         intro="Practical insights on web performance, frontend architecture, and building products that scale — from the engineers at Couto Software House."
         pages={blogArticles}

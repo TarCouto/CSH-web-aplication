@@ -9,7 +9,7 @@ export function DashboardShell({
   children: React.ReactNode
 }) {
   return (
-    <Container wide className="mt-4 sm:mt-8 lg:mt-40 mb-16 sm:mb-24 lg:mb-32">
+    <Container wide className="mt-4 mb-16 sm:mt-8 sm:mb-24 lg:mt-16 lg:mb-32">
       <div className="lg:grid lg:grid-cols-[17rem_minmax(0,1fr)] lg:items-start lg:gap-20">
         <DashboardAccountPanel email={email} />
 

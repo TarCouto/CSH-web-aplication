@@ -14,11 +14,12 @@ import { StatList, StatListItem } from '@/components/StatList'
 import imageLaptop from '@/images/laptop.jpg'
 import { type CaseStudy, type MDXEntry, loadCaseStudies } from '@/lib/mdx'
 import { RootLayout } from '@/components/RootLayout'
+import { PAGE_INTRO_Y, SECTION_Y } from '@/lib/spacing'
 
 function Results() {
   return (
-    <div className="mt-16 -mx-5 rounded-4xl bg-neutral-950 py-16 sm:mx-0 sm:mt-24 sm:py-32 lg:mt-56">
-      <Container>
+    <Container className={SECTION_Y}>
+      <div className="rounded-4xl bg-neutral-950 px-6 py-16 sm:px-10 sm:py-24">
         <FadeIn>
           <h2 className="font-display text-2xl font-semibold text-white">
             Results that speak for themselves
@@ -28,7 +29,7 @@ function Results() {
             higher conversion rates, and scalable architectures.
           </p>
         </FadeIn>
-        <div className="mt-16">
+        <div className="mt-12 sm:mt-16">
           <StatList>
             <StatListItem invert value="50+" label="Projects delivered" />
             <StatListItem invert value="98%" label="Client satisfaction" />
@@ -36,8 +37,8 @@ function Results() {
             <StatListItem invert value="3x" label="Conversion increase" />
           </StatList>
         </div>
-      </Container>
-    </div>
+      </div>
+    </Container>
   )
 }
 
@@ -50,7 +51,7 @@ function CaseStudies({
     <>
       <SectionIntro
         title="Building digital products that drive real results"
-        className="mt-24 sm:mt-32 lg:mt-40"
+        className={SECTION_Y}
       >
         <p>
           We combine deep frontend expertise with a performance-first mindset
@@ -106,7 +107,7 @@ function Services() {
       <SectionIntro
         eyebrow="Services"
         title="We help you build fast, modern, and scalable web applications."
-        className="mt-24 sm:mt-32 lg:mt-40"
+        className={SECTION_Y}
       >
         <p>
           From high-converting landing pages to complex single page applications,
@@ -167,7 +168,7 @@ export default async function Home() {
 
   return (
     <RootLayout>
-      <Container className="mt-16 sm:mt-24 md:mt-32 lg:mt-56">
+      <Container className={PAGE_INTRO_Y}>
         <div className="max-w-3xl">
           <h1 className="font-display text-[1.75rem] font-medium leading-tight tracking-tight text-balance text-neutral-950 sm:text-5xl lg:text-7xl">
             High-performance web applications built in Brazil, delivered globally.
@@ -185,7 +186,7 @@ export default async function Home() {
       <CaseStudies caseStudies={caseStudies} />
 
       <Testimonial
-        className="mt-24 sm:mt-32 lg:mt-40"
+        className={SECTION_Y}
         client={{ name: 'Couto Software House', logo: logoCsh }}
       >
         Couto Software House delivered a blazing-fast web application that

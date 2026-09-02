@@ -7,6 +7,7 @@ import { Container } from '@/components/Container'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
 import { NO_INDEX_ROBOTS } from '@/lib/metadata'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 import { parseOtpType, parseTokenHash } from '@/lib/verify-email-otp'
 
 export const metadata: Metadata = {
@@ -43,7 +44,7 @@ export default async function SignupConfirmPage({
         </p>
       </PageIntro>
 
-      <Container className="mt-16 sm:mt-24">
+      <Container className={AFTER_INTRO_Y}>
         <Suspense fallback={null}>
           <ConfirmEmailButton />
         </Suspense>

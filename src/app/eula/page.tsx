@@ -4,6 +4,7 @@ import { Container } from '@/components/Container'
 import { FadeIn } from '@/components/FadeIn'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 
 export const metadata: Metadata = {
   title: 'End User License Agreement',
@@ -23,7 +24,7 @@ export default function EulaPage() {
         </p>
       </PageIntro>
 
-      <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <Container className={AFTER_INTRO_Y}>
         <FadeIn>
           <div className="max-w-3xl space-y-10 text-base text-neutral-600">
             <section>

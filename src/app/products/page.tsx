@@ -6,6 +6,7 @@ import { PageIntro } from '@/components/PageIntro'
 import { ProductCard } from '@/components/products/ProductCard'
 import { RootLayout } from '@/components/RootLayout'
 import { createClient } from '@/lib/supabase/server'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 import { listPublishedProducts } from '@/server/services/products'
 
 export const metadata: Metadata = {
@@ -37,7 +38,7 @@ export default async function ProductsPage() {
         </p>
       </PageIntro>
 
-      <Container className="mt-16">
+      <Container className={AFTER_INTRO_Y}>
         {products.length === 0 ? (
           <FadeIn>
             <p className="text-center text-lg text-neutral-600">

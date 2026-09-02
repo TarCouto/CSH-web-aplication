@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import Link from 'next/link'
 
 import { Container } from '@/components/Container'
@@ -5,6 +6,7 @@ import { FadeIn } from '@/components/FadeIn'
 import { Logo } from '@/components/Logo'
 import { NewsletterForm } from '@/components/NewsletterForm'
 import { socialMediaProfiles } from '@/components/SocialMedia'
+import { SECTION_Y } from '@/lib/spacing'
 
 const navigation = [
   {
@@ -77,7 +79,7 @@ function Navigation() {
 
 export function Footer() {
   return (
-    <Container as="footer" className="mt-24 w-full sm:mt-32 lg:mt-40">
+    <Container as="footer" className={clsx(SECTION_Y, 'w-full')}>
       <FadeIn>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
           <Navigation />

@@ -19,9 +19,10 @@ Before implementing any feature, bugfix, or refactor in this repo:
 | Auth API | `src/app/api/auth/` or `src/app/auth/` | Thin routes; logic in `src/lib/` or `src/server/services/` |
 | Business logic | `src/server/services/` | Functions receive Supabase/Stripe clients as params |
 | Shared UI | `src/components/` | Reuse `Button`, `FadeIn`, `PageIntro`, form patterns |
+| Spacing | `src/lib/spacing.ts` | `PAGE_INTRO_Y`, `SECTION_Y`, `AFTER_INTRO_Y`, `BAND_PT`, `GUTTER_X` — see skill `senior-ui-ux` |
 | Utils / constants | `src/lib/` | `site-url.ts`, `metadata.ts`, `auth.ts`, etc. |
 | SQL | `supabase/migrations/` | Numbered, idempotent migrations |
-| Auth emails | `supabase/templates/` | OTP links via `/auth/confirm?token_hash=...` |
+| Auth emails | `supabase/templates/` | Click-to-confirm links via `/signup/confirm` and `/confirm` (see `supabase-auth` rule) |
 
 ## Page shell (marketing / account)
 

@@ -8,6 +8,7 @@ import { PageIntro } from '@/components/PageIntro'
 import { BuyButton } from '@/components/products/BuyButton'
 import { RootLayout } from '@/components/RootLayout'
 import { formatPrice } from '@/lib/money'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 import { createClient } from '@/lib/supabase/server'
 import { type Json } from '@/lib/supabase/types'
 import { getPublishedProductBySlug } from '@/server/services/products'
@@ -71,7 +72,7 @@ export default async function ProductPage({ params }: PageProps) {
         {product.tagline && <p>{product.tagline}</p>}
       </PageIntro>
 
-      <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <Container className={AFTER_INTRO_Y}>
         <FadeIn>
           {paragraphs.length > 0 && (
             <div className="max-w-3xl space-y-6 text-base text-neutral-600">

@@ -9,6 +9,7 @@ import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
 import { safeRedirectPath } from '@/lib/auth'
 import { isSupabaseConfigured } from '@/lib/env'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
@@ -45,7 +46,7 @@ export default async function LoginPage({
         <p>Sign in to access your purchased products.</p>
       </PageIntro>
 
-      <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <Container className={AFTER_INTRO_Y}>
         <div className="max-w-md">
           <Suspense fallback={null}>
             <LoginForm />

@@ -6,6 +6,7 @@ import { FadeIn } from '@/components/FadeIn'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
 import { NO_INDEX_ROBOTS } from '@/lib/metadata'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 
 export const metadata: Metadata = {
   title: 'Confirmation failed',
@@ -23,7 +24,7 @@ export default function SignupConfirmFailedPage() {
         </p>
       </PageIntro>
 
-      <Container className="mt-16 sm:mt-24">
+      <Container className={AFTER_INTRO_Y}>
         <FadeIn className="max-w-lg">
           <p className="text-base text-neutral-600" role="alert">
             Please wait a few minutes and try signing up again. If the problem

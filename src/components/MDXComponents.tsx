@@ -10,7 +10,7 @@ export const MDXComponents = {
     className,
     ...props
   }: React.ComponentPropsWithoutRef<typeof Blockquote>) {
-    return <Blockquote className={clsx('my-32', className)} {...props} />
+    return <Blockquote className={clsx('my-12 sm:my-16', className)} {...props} />
   },
   img: function Img({
     className,
@@ -19,7 +19,7 @@ export const MDXComponents = {
     return (
       <div
         className={clsx(
-          'group isolate my-10 overflow-hidden rounded-4xl bg-neutral-100 max-sm:-mx-6',
+          'group isolate my-10 overflow-hidden rounded-4xl bg-neutral-100',
           className,
         )}
       >
@@ -36,7 +36,7 @@ export const MDXComponents = {
     ...props
   }: React.ComponentPropsWithoutRef<typeof StatList>) {
     return (
-      <StatList className={clsx('my-32 max-w-none!', className)} {...props} />
+      <StatList className={clsx('my-12 max-w-none! sm:my-16', className)} {...props} />
     )
   },
   StatListItem,
@@ -47,11 +47,11 @@ export const MDXComponents = {
     return (
       <div
         className={clsx(
-          'my-10 max-sm:-mx-6 max-sm:flex max-sm:overflow-x-auto',
+          'my-10 max-sm:flex max-sm:overflow-x-auto',
           className,
         )}
       >
-        <div className="max-sm:min-w-full max-sm:flex-none max-sm:px-6">
+        <div className="max-sm:min-w-full max-sm:flex-none">
           <table {...props} />
         </div>
       </div>

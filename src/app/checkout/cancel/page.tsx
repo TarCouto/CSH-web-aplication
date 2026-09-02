@@ -5,6 +5,7 @@ import { Container } from '@/components/Container'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
 import { NO_INDEX_ROBOTS } from '@/lib/metadata'
+import { AFTER_INTRO_Y } from '@/lib/spacing'
 
 export const metadata: Metadata = {
   title: 'Checkout canceled',
@@ -22,7 +23,7 @@ export default function CheckoutCancelPage() {
         </p>
       </PageIntro>
 
-      <Container className="mt-16">
+      <Container className={AFTER_INTRO_Y}>
         <Button href="/products">Back to store</Button>
       </Container>
     </RootLayout>

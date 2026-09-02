@@ -114,6 +114,20 @@ module.exports = {
 
 ---
 
+## Espaçamento (obrigatório)
+
+Fonte: `src/lib/spacing.ts`. Skill: `.cursor/skills/senior-ui-ux/SKILL.md`.
+
+| Token | Classes | Uso |
+|-------|---------|-----|
+| `GUTTER_X` | `px-5 sm:px-6 lg:px-8` | Já aplicado no `Container`. Conteúdo nunca sai disso no mobile. |
+| `PAGE_INTRO_Y` | `mt-16 sm:mt-24 lg:mt-32` | Primeiro bloco após o header |
+| `SECTION_Y` | `mt-16 sm:mt-24 lg:mt-32` | Entre seções maiores |
+| `AFTER_INTRO_Y` | `mt-10 sm:mt-16 lg:mt-24` | `PageIntro` → primeiro conteúdo |
+| `BAND_PT` | `pt-16 sm:pt-24 lg:pt-32` | Padding interno de faixa com fundo. Não somar com `SECTION_Y`. |
+
+Não usar `-mx-5` / `-mx-6` para colar cards ou texto na borda da tela.
+
 ## Responsividade
 
 Breakpoints Tailwind padrão:
