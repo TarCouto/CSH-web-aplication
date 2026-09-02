@@ -1,0 +1,49 @@
+---
+description: Always read project docs and follow CSH architecture before coding
+alwaysApply: true
+---
+
+# Architecture and documentation first
+
+Before implementing any feature, bugfix, or refactor in this repo:
+
+1. **Read `docs/README.md`** — pick the docs relevant to the task (architecture, routes, components, API, auth, database, etc.).
+2. **Follow existing patterns** — match how similar pages, API routes, and services are already built.
+3. **Do not invent parallel structures** when the project already has a convention.
+
+## Architecture checklist
+
+| Layer | Location | Pattern |
+|-------|----------|---------|
+| Public pages | `src/app/{route}/page.tsx` | Server component + `RootLayout` + `PageIntro` + `Container` |
+| Auth API | `src/app/api/auth/` or `src/app/auth/` | Thin routes; logic in `src/lib/` or `src/server/services/` |
+| Business logic | `src/server/services/` | Functions receive Supabase/Stripe clients as params |
+| Shared UI | `src/components/` | Reuse `Button`, `FadeIn`, `PageIntro`, form patterns |
+| Utils / constants | `src/lib/` | `site-url.ts`, `metadata.ts`, `auth.ts`, etc. |
+| SQL | `supabase/migrations/` | Numbered, idempotent migrations |
+| Auth emails | `supabase/templates/` | OTP links via `/auth/confirm?token_hash=...` |
+
+## Page shell (marketing / account)
+
+```tsx
+<RootLayout>
+  <PageIntro eyebrow="..." title="...">
+    <p>...</p>
+  </PageIntro>
+  <Container className="mt-24 sm:mt-32 lg:mt-40">
+    {/* content */}
+  </Container>
+</RootLayout>
+```
+
+Reference: `src/app/checkout/success/page.tsx`, `src/app/login/page.tsx`.
+
+## Private / auth pages
+
+- Export `metadata` with `robots: NO_INDEX_ROBOTS` from `@/lib/metadata`.
+- Add route to `robots.ts` disallow list when it is account-only.
+
+## After coding
+
+- Run `npm run typecheck`, `npm run lint`, and `npm test` when touching logic.
+- Update the matching doc in `docs/` if behavior or routes changed.

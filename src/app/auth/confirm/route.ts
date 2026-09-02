@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { EmailOtpType } from '@supabase/supabase-js'
 
-import { safeRedirectPath } from '@/lib/auth'
+import {
+  isSignupConfirmFlow,
+  safeRedirectPath,
+  SIGNUP_CONFIRM_FAILED_PATH,
+} from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 
 const ALLOWED_OTP_TYPES = new Set<EmailOtpType>([
@@ -13,11 +17,19 @@ const ALLOWED_OTP_TYPES = new Set<EmailOtpType>([
   'email_change',
 ])
 
+function confirmFailureRedirect(origin: string, nextParam: string | null) {
+  if (isSignupConfirmFlow(nextParam)) {
+    return NextResponse.redirect(`${origin}${SIGNUP_CONFIRM_FAILED_PATH}`)
+  }
+  return NextResponse.redirect(`${origin}/login?error=confirm_failed`)
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const tokenHash = searchParams.get('token_hash')
   const typeParam = searchParams.get('type')
-  const next = safeRedirectPath(searchParams.get('next'))
+  const nextParam = searchParams.get('next')
+  const next = safeRedirectPath(nextParam)
 
   if (
     !tokenHash ||
@@ -28,7 +40,7 @@ export async function GET(request: Request) {
       type: typeParam,
       hasTokenHash: Boolean(tokenHash),
     })
-    return NextResponse.redirect(`${origin}/login?error=confirm_failed`)
+    return confirmFailureRedirect(origin, nextParam)
   }
 
   const supabase = await createClient()
@@ -42,7 +54,7 @@ export async function GET(request: Request) {
       type: typeParam,
       message: error.message,
     })
-    return NextResponse.redirect(`${origin}/login?error=confirm_failed`)
+    return confirmFailureRedirect(origin, nextParam)
   }
 
   return NextResponse.redirect(`${origin}${next}`)

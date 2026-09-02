@@ -60,11 +60,16 @@ Use `{{ .SiteURL }}` + `{{ .TokenHash }}` apontando para `/auth/confirm`:
 
 | Template | Link |
 |----------|------|
-| Confirm signup | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard` |
+| Confirm signup | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/signup/confirmed` |
 | Magic link | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard` |
 | Reset password | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/dashboard/profile` |
 
-A rota `src/app/auth/confirm/route.ts` chama `verifyOtp({ type, token_hash })` e cria a sessão no navegador que abriu o link.
+A rota `src/app/auth/confirm/route.ts` chama `verifyOtp({ type, token_hash })` e redireciona conforme `next`:
+
+| Resultado | Destino (signup) | Destino (outros fluxos) |
+|-----------|------------------|------------------------|
+| Sucesso | `/signup/confirmed` — instruções + botão de login | valor de `next` (ex.: `/dashboard`) |
+| Falha | `/signup/confirm-failed` — aviso + tentar cadastro de novo | `/login?error=confirm_failed` |
 
 `/auth/callback` permanece para OAuth (Google, etc.) e fluxos PKCE no mesmo browser.
 
@@ -74,8 +79,8 @@ A rota `src/app/auth/confirm/route.ts` chama `verifyOtp({ type, token_hash })` e
 2. Confirme Site URL e Redirect URLs (secção 2).
 3. Crie uma conta nova em um navegador.
 4. Abra o e-mail de confirmação e clique no link **em outro navegador ou dispositivo** (simula webmail).
-5. Deve entrar no dashboard — conta confirmada e sessão criada.
-6. Link já usado ou expirado → `/login?error=confirm_failed`.
+5. Deve abrir `/signup/confirmed` com instruções de primeiro login — conta confirmada.
+6. Link já usado ou expirado → `/signup/confirm-failed` (cadastro) ou `/login?error=confirm_failed` (magic link).
 7. O From deve ser `Couto Software House <support@couto.software>` (ou o sender configurado), sem “powered by Supabase”.
 
 E-mails de **contato e newsletter** já saem pelo Zoho (`src/lib/email.ts`). E-mails de **compra** também. Só o Auth precisava deste SMTP no painel.

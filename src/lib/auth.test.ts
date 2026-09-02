@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import { safeRedirectPath } from './auth'
+import { isSignupConfirmFlow, safeRedirectPath } from './auth'
 
 describe('safeRedirectPath', () => {
   it('allows same-origin relative paths', () => {
@@ -20,5 +20,13 @@ describe('safeRedirectPath', () => {
     assert.equal(safeRedirectPath(''), '/dashboard')
     assert.equal(safeRedirectPath(null), '/dashboard')
     assert.equal(safeRedirectPath(undefined), '/dashboard')
+  })
+})
+
+describe('isSignupConfirmFlow', () => {
+  it('detects signup confirmation redirect target', () => {
+    assert.equal(isSignupConfirmFlow('/signup/confirmed'), true)
+    assert.equal(isSignupConfirmFlow('/dashboard'), false)
+    assert.equal(isSignupConfirmFlow(null), false)
   })
 })

@@ -19,6 +19,13 @@ export const serverSessionCookieOptions = {
   secure: process.env.NODE_ENV === 'production',
 }
 
+export const SIGNUP_CONFIRM_SUCCESS_PATH = '/signup/confirmed'
+export const SIGNUP_CONFIRM_FAILED_PATH = '/signup/confirm-failed'
+
+export function isSignupConfirmFlow(next: string | null | undefined): boolean {
+  return next === SIGNUP_CONFIRM_SUCCESS_PATH
+}
+
 export function safeRedirectPath(value: string | null | undefined): string {
   if (
     !value ||

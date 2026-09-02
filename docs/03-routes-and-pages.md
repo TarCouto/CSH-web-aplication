@@ -14,6 +14,15 @@ Todas usam `RootLayout` como shell (header + footer).
 | `/work` | `src/app/work/page.tsx` | Our Work | Listagem de case studies MDX |
 | *(404)* | `src/app/not-found.tsx` | — | Página não encontrada |
 
+### Conta (auth)
+
+| Rota | Arquivo | Title | Propósito |
+|------|---------|-------|-----------|
+| `/login` | `src/app/login/page.tsx` | Log in | Login de conta |
+| `/signup` | `src/app/signup/page.tsx` | Sign up | Cadastro |
+| `/signup/confirmed` | `src/app/signup/confirmed/page.tsx` | Email confirmed | Sucesso pós-confirmação de e-mail |
+| `/signup/confirm-failed` | `src/app/signup/confirm-failed/page.tsx` | Confirmation failed | Erro na confirmação — tentar cadastro de novo |
+
 ---
 
 ## Home (`/`)
