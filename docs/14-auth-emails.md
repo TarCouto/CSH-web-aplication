@@ -60,7 +60,7 @@ Use `{{ .SiteURL }}` + `{{ .TokenHash }}` apontando para `/auth/confirm`:
 
 | Template | Link |
 |----------|------|
-| Confirm signup | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/signup/confirmed` |
+| Confirm signup | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup&next=/signup/confirmed` |
 | Magic link | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard` |
 | Reset password | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/dashboard/profile` |
 

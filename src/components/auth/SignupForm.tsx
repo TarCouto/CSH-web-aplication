@@ -56,16 +56,15 @@ export function SignupForm() {
     const password = formData.get('password') as string
 
     const supabase = createClient()
-    const callbackUrl = new URL('/auth/callback', window.location.origin)
-    if (redirect) {
-      callbackUrl.searchParams.set('next', redirect)
-    }
+    const confirmNext = redirect
+      ? `/signup/confirmed?redirect=${encodeURIComponent(redirect)}`
+      : '/signup/confirmed'
 
     const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: callbackUrl.toString(),
+        emailRedirectTo: new URL(confirmNext, window.location.origin).toString(),
       },
     })
 

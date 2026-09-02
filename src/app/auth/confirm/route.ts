@@ -24,9 +24,25 @@ function confirmFailureRedirect(origin: string, nextParam: string | null) {
   return NextResponse.redirect(`${origin}/login?error=confirm_failed`)
 }
 
+/** Confirm signup emails use type=signup; magic link uses email. Try both on signup flow. */
+function otpTypesToTry(
+  typeParam: EmailOtpType,
+  nextParam: string | null,
+): EmailOtpType[] {
+  if (isSignupConfirmFlow(nextParam)) {
+    const alternate: EmailOtpType =
+      typeParam === 'signup' ? 'email' : 'signup'
+    return typeParam === alternate ? [typeParam] : [typeParam, alternate]
+  }
+  return [typeParam]
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
-  const tokenHash = searchParams.get('token_hash')
+  const rawTokenHash = searchParams.get('token_hash')
+  const tokenHash = rawTokenHash
+    ? decodeURIComponent(rawTokenHash)
+    : null
   const typeParam = searchParams.get('type')
   const nextParam = searchParams.get('next')
   const next = safeRedirectPath(nextParam)
@@ -44,18 +60,29 @@ export async function GET(request: Request) {
   }
 
   const supabase = await createClient()
-  const { error } = await supabase.auth.verifyOtp({
-    type: typeParam as EmailOtpType,
-    token_hash: tokenHash,
-  })
+  const types = otpTypesToTry(typeParam as EmailOtpType, nextParam)
+  let lastError: { message: string } | null = null
 
-  if (error) {
+  for (const otpType of types) {
+    const { error } = await supabase.auth.verifyOtp({
+      type: otpType,
+      token_hash: tokenHash,
+    })
+
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`)
+    }
+
+    lastError = error
     console.error('[auth/confirm] verifyOtp failed', {
-      type: typeParam,
+      type: otpType,
       message: error.message,
     })
-    return confirmFailureRedirect(origin, nextParam)
   }
 
-  return NextResponse.redirect(`${origin}${next}`)
+  console.error('[auth/confirm] all verifyOtp attempts failed', {
+    types,
+    message: lastError?.message,
+  })
+  return confirmFailureRedirect(origin, nextParam)
 }
