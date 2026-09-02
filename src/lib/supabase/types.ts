@@ -285,6 +285,13 @@ export type Database = {
           retry_after: number
         }[]
       }
+      purge_expired_downloads: {
+        Args: {
+          anonymise_days?: number
+          retention_days?: number
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

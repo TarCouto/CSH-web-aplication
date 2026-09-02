@@ -187,6 +187,26 @@ O browser nunca acessa o bucket diretamente. A entrega é feita no servidor: o s
 
 ---
 
+## Privacidade e retenção de dados
+
+Definido em `0006_download_retention.sql`. A tabela `downloads` é a única que guarda dado pessoal além do e-mail (IP e user agent), então tem ciclo de vida explícito:
+
+| Prazo | O que acontece | Onde |
+|-------|----------------|------|
+| 30 dias | `ip` e `user_agent` viram `null`; o evento (quem/o quê/quando) permanece | `purge_expired_downloads(anonymise_days => 30)` |
+| 180 dias | a linha é deletada | `purge_expired_downloads(retention_days => 180)` |
+| exclusão da conta | `downloads` do usuário são apagados em cascata | FK `downloads_user_id_fkey → auth.users on delete cascade` |
+
+A varredura é **oportunista**, não agendada: `purgeExpiredDownloads()` (`src/server/services/entitlements.ts`) roda em ~5% das entregas. Downloads são de baixo volume, então isso mantém a janela sem depender de `pg_cron`. Falha de purge é logada e nunca derruba o download.
+
+`downloads` não tem policy nenhuma (deny-all): só o service role escreve, e nada na aplicação lê a tabela — os contadores do dashboard vêm de `entitlements.download_count`.
+
+**Divulgação ao usuário:** a seção 8 da [EULA](../src/app/eula/page.tsx) descreve o watermark com e-mail dentro do `LICENSE.txt` e os prazos acima. Ao mudar os prazos aqui, atualize a EULA junto.
+
+**Colunas não públicas:** `0005_column_privileges.sql` revoga `select` amplo em `products` para `anon`/`authenticated` e concede apenas as colunas da vitrine. `storage_path`, `stripe_price_id` e `stripe_product_id` só são legíveis pelo service role — por isso `getPublishedProductForCheckout` usa o service client.
+
+---
+
 ## Migrations versionadas
 
 As migrations são arquivos SQL em `supabase/migrations/`, aplicados em ordem alfabética e registrados em `public.schema_migrations` (cada arquivo roda **uma única vez**, dentro de uma transação).

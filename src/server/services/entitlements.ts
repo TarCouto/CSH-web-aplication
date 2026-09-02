@@ -73,3 +73,24 @@ export async function decrementDownloadCount(
 
   return data === true
 }
+
+/** Roughly one sweep per 20 downloads keeps the audit log inside its retention window. */
+const PURGE_SAMPLE_RATE = 0.05
+
+/**
+ * Opportunistic retention sweep. Downloads are low volume, so piggybacking on
+ * the delivery path avoids depending on a scheduler. Never fails the download:
+ * a purge error is logged and swallowed.
+ */
+export async function purgeExpiredDownloads(
+  supabase: SupabaseClient<Database>,
+  { force = false }: { force?: boolean } = {},
+): Promise<void> {
+  if (!force && Math.random() >= PURGE_SAMPLE_RATE) return
+
+  const { error } = await supabase.rpc('purge_expired_downloads', {})
+
+  if (error) {
+    console.error('Download retention purge failed:', error)
+  }
+}

@@ -123,7 +123,29 @@ export default function EulaPage() {
 
             <section>
               <h2 className="font-display text-base font-semibold text-neutral-950">
-                8. Contact
+                8. Privacy and data retention
+              </h2>
+              <p className="mt-4">
+                Every downloaded archive contains a{' '}
+                <span className="font-semibold">LICENSE.txt</span> watermarked
+                with the purchase email address and a unique license
+                identifier. This lets us trace redistributed copies back to the
+                account they came from, so treat the archive as personal to you.
+              </p>
+              <p className="mt-4">
+                We log each download — the account, the product, the timestamp,
+                the IP address and the browser user agent — to detect licence
+                abuse. IP addresses and user agents are erased 30 days after the
+                download, and the remaining log entry is deleted after 180 days.
+                Deleting your account removes your download history along with
+                it. Requests regarding your personal data may be sent to the
+                address below.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="font-display text-base font-semibold text-neutral-950">
+                9. Contact
               </h2>
               <p className="mt-4">
                 Questions about this agreement or licensing may be sent to{' '}

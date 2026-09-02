@@ -15,6 +15,7 @@ import {
   decrementDownloadCount,
   getEntitlement,
   incrementDownloadCount,
+  purgeExpiredDownloads,
 } from '@/server/services/entitlements'
 
 export const runtime = 'nodejs'
@@ -140,6 +141,8 @@ export async function GET(
     if (downloadError) {
       console.error('Download audit log failed:', downloadError)
     }
+
+    await purgeExpiredDownloads(serviceClient)
 
     reservedEntitlementId = null
 
