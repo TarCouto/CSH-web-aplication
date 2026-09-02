@@ -4,6 +4,7 @@ import { env } from '@/lib/env'
 import { getStripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { isValidUuid } from '@/lib/validation'
 import { getOrCreateStripeCustomer } from '@/server/services/billing'
 import { createCheckoutSession } from '@/server/services/checkout'
 import { getProfile } from '@/server/services/profiles'
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { productId } = body
 
-    if (!productId) {
+    if (!productId || typeof productId !== 'string' || !isValidUuid(productId)) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 })
     }
 
@@ -40,8 +41,8 @@ export async function POST(request: Request) {
     }
 
     const stripe = getStripe()
+    const profile = await getProfile(supabase, user.id)
     const service = createServiceClient()
-    const profile = await getProfile(service, user.id)
     const customerId = user.email
       ? await getOrCreateStripeCustomer(stripe, service, {
           userId: user.id,
@@ -60,7 +61,8 @@ export async function POST(request: Request) {
     })
 
     return NextResponse.json({ url })
-  } catch {
+  } catch (error) {
+    console.error('Checkout failed:', error)
     return NextResponse.json({ error: 'Checkout failed' }, { status: 500 })
   }
 }

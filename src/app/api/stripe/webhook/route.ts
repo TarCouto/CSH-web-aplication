@@ -5,6 +5,7 @@ import { getStripe } from '@/lib/stripe'
 import { createServiceClient } from '@/lib/supabase/service'
 import {
   fulfillCheckoutSession,
+  handleRefund,
   syncStripePrice,
   syncStripeProduct,
 } from '@/server/services/orders'
@@ -34,15 +35,40 @@ export async function POST(request: Request) {
 
   const service = createServiceClient()
 
+  const stripe = getStripe()
+
   try {
     switch (event.type) {
       case 'checkout.session.completed':
+      case 'checkout.session.async_payment_succeeded':
         await fulfillCheckoutSession(
           service,
           event.data.object,
           env.downloadLimit,
         )
         break
+      case 'charge.refunded':
+        await handleRefund(stripe, service, event.data.object)
+        break
+      case 'charge.dispute.created': {
+        const dispute = event.data.object
+        const chargeId =
+          typeof dispute.charge === 'string'
+            ? dispute.charge
+            : dispute.charge?.id
+
+        if (chargeId) {
+          const charge = await stripe.charges.retrieve(chargeId)
+          await handleRefund(stripe, service, charge, {
+            skipPartialCheck: true,
+          })
+        } else {
+          console.error(
+            `Stripe webhook: dispute ${dispute.id} missing charge reference`,
+          )
+        }
+        break
+      }
       case 'product.created':
       case 'product.updated':
         await syncStripeProduct(service, event.data.object)
@@ -53,7 +79,11 @@ export async function POST(request: Request) {
         break
     }
   } catch (error) {
-    console.error(`Stripe webhook handler failed for ${event.type}:`, error)
+    console.error(
+      `Stripe webhook handler failed for ${event.id} ${event.type}:`,
+      error,
+    )
+    return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 })
   }
 
   return NextResponse.json({ received: true })

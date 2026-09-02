@@ -5,6 +5,13 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/Button'
 import { FadeIn } from '@/components/FadeIn'
+import { safeRedirectPath } from '@/lib/auth'
+
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  confirm_failed:
+    'This confirmation link is invalid or has expired. Please sign up again or request a new link.',
+  auth_callback_error: 'Sign-in failed. Please try again.',
+}
 
 function TextInput({
   label,
@@ -35,7 +42,12 @@ export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect')
-  const [error, setError] = useState<string | null>(null)
+  const errorParam = searchParams.get('error')
+  const [error, setError] = useState<string | null>(() =>
+    errorParam && AUTH_ERROR_MESSAGES[errorParam]
+      ? AUTH_ERROR_MESSAGES[errorParam]
+      : null,
+  )
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -61,7 +73,7 @@ export function LoginForm() {
       return
     }
 
-    router.push(redirect || '/dashboard')
+    router.push(safeRedirectPath(redirect))
     router.refresh()
   }
 
@@ -86,7 +98,9 @@ export function LoginForm() {
           />
         </div>
         {error && (
-          <p className="mt-4 text-sm text-red-600">{error}</p>
+          <p className="mt-4 text-sm text-red-600" role="alert">
+            {error}
+          </p>
         )}
         <Button type="submit" className="mt-10" disabled={loading}>
           {loading ? 'Signing in...' : 'Log in'}

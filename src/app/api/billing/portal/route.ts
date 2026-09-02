@@ -30,8 +30,8 @@ export async function POST() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const profile = await getProfile(supabase, user.id)
     const service = createServiceClient()
-    const profile = await getProfile(service, user.id)
     const customerId = await getOrCreateStripeCustomer(getStripe(), service, {
       userId: user.id,
       email: user.email,

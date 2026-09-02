@@ -39,6 +39,22 @@ export async function getOrCreateStripeCustomer(
     .eq('id', params.userId)
 
   if (error) {
+    if (error.code === '23505') {
+      if (params.existingCustomerId) {
+        return params.existingCustomerId
+      }
+
+      const { data: refetched } = await supabase
+        .from('profiles')
+        .select('stripe_customer_id')
+        .eq('id', params.userId)
+        .maybeSingle()
+
+      if (refetched?.stripe_customer_id) {
+        return refetched.stripe_customer_id
+      }
+    }
+
     throw error
   }
 

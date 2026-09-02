@@ -12,7 +12,7 @@ Use o **mesmo Zoho** dos formulários do site para o remetente ser **Couto Softw
 |-------|--------|
 | Enable custom SMTP | on |
 | Sender name | `Couto Software House` |
-| Sender email | `support@couto.software` (ou o alias que o Zoho autoriza) |
+| Sender email | `support@couto.software` (ou o alias que o Zoho autorizar) |
 | Host | `smtp.zoho.com` |
 | Port | `465` |
 | Username | o mesmo `ZOHO_SMTP_USER` do `.env.local` |
@@ -30,9 +30,9 @@ Não cole a senha neste repositório. Use a que já está no `.env.local`.
 | Campo | Valor |
 |-------|--------|
 | Site URL | `https://couto.software` |
-| Redirect URLs | `https://couto.software/auth/callback` e `http://localhost:3000/auth/callback` |
+| Redirect URLs | `https://couto.software/**` e `http://localhost:3000/**` |
 
-Sem isso, o botão “Confirm” do e-mail falha depois do SMTP estar certo.
+O wildcard cobre `/auth/confirm` (confirmação por OTP) e `/auth/callback` (OAuth / PKCE same-browser).
 
 ## 3. Templates
 
@@ -52,14 +52,30 @@ Subject sugerido:
 - Magic link: `Sign in to Couto Software House`
 - Reset password: `Reset your Couto Software House password`
 
-Não apague `{{ .ConfirmationURL }}` — é o link assinado do Auth.
+### Formato dos links (OTP — funciona em qualquer navegador)
+
+**Não use** `{{ .ConfirmationURL }}` nos templates de e-mail. Esse URL termina em `/auth/callback?code=...` e depende do cookie PKCE do navegador em que o usuário se cadastrou — falha ao abrir o link no webmail, celular ou Outlook SafeLinks.
+
+Use `{{ .SiteURL }}` + `{{ .TokenHash }}` apontando para `/auth/confirm`:
+
+| Template | Link |
+|----------|------|
+| Confirm signup | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard` |
+| Magic link | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard` |
+| Reset password | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/dashboard/profile` |
+
+A rota `src/app/auth/confirm/route.ts` chama `verifyOtp({ type, token_hash })` e cria a sessão no navegador que abriu o link.
+
+`/auth/callback` permanece para OAuth (Google, etc.) e fluxos PKCE no mesmo browser.
 
 ## 4. Como validar
 
-1. Salve SMTP + templates.
-2. Crie uma conta nova (ou reenvie a confirmação).
-3. O From deve ser `Couto Software House <support@couto.software>` (ou o sender que você configurou).
-4. Sem “powered by Supabase” no rodapé.
-5. O botão abre `/auth/callback` e entra no dashboard.
+1. Salve SMTP + templates no painel Supabase (Authentication → Emails).
+2. Confirme Site URL e Redirect URLs (secção 2).
+3. Crie uma conta nova em um navegador.
+4. Abra o e-mail de confirmação e clique no link **em outro navegador ou dispositivo** (simula webmail).
+5. Deve entrar no dashboard — conta confirmada e sessão criada.
+6. Link já usado ou expirado → `/login?error=confirm_failed`.
+7. O From deve ser `Couto Software House <support@couto.software>` (ou o sender configurado), sem “powered by Supabase”.
 
 E-mails de **contato e newsletter** já saem pelo Zoho (`src/lib/email.ts`). E-mails de **compra** também. Só o Auth precisava deste SMTP no painel.

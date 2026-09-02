@@ -18,7 +18,7 @@ function ContactDetails() {
       </h2>
       <p className="mt-6 text-base text-neutral-600">
         Based in São Paulo, Brazil — delivering globally. Reach out and
-        let's discuss your project.
+        let us discuss your project.
       </p>
 
       <Offices className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2" />
@@ -29,8 +29,8 @@ function ContactDetails() {
         </h2>
         <dl className="mt-6 grid grid-cols-1 gap-8 text-sm sm:grid-cols-2">
           {[
-            ['General', 'hello@coutosoftwarehouse.com'],
-            ['Careers', 'careers@coutosoftwarehouse.com'],
+            ['General', 'hello@couto.software'],
+            ['Careers', 'careers@couto.software'],
           ].map(([label, email]) => (
             <div key={email}>
               <dt className="font-semibold text-neutral-950">{label}</dt>
@@ -72,8 +72,8 @@ export const metadata: Metadata = {
 export default function Contact() {
   return (
     <RootLayout>
-      <PageIntro eyebrow="Contact us" title="Let's build something great">
-        <p>Ready to start your next project? We'd love to hear from you.</p>
+      <PageIntro eyebrow="Contact us" title="Let us build something great">
+        <p>Ready to start your next project? We would love to hear from you.</p>
       </PageIntro>
 
       <Container className="mt-24 sm:mt-32 lg:mt-40">

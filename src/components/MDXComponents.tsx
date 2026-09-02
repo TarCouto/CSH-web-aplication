@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 
 import { Blockquote } from '@/components/Blockquote'
-import { Border } from '@/components/Border'
 import { GrayscaleTransitionImage } from '@/components/GrayscaleTransitionImage'
 import { StatList, StatListItem } from '@/components/StatList'
 import { TagList, TagListItem } from '@/components/TagList'
@@ -65,22 +64,6 @@ export const MDXComponents = {
     return <TagList className={clsx('my-6', className)} {...props} />
   },
   TagListItem,
-  TopTip({
-    children,
-    className,
-  }: {
-    children: React.ReactNode
-    className?: string
-  }) {
-    return (
-      <Border position="left" className={clsx('my-10 pl-8', className)}>
-        <p className="font-display text-sm font-bold tracking-widest text-neutral-950 uppercase">
-          Top tip
-        </p>
-        <div className="mt-4">{children}</div>
-      </Border>
-    )
-  },
   Typography({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
     return <div className={clsx('typography', className)} {...props} />
   },

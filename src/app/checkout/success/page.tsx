@@ -1,7 +1,16 @@
+import { type Metadata } from 'next'
+
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
+import { NO_INDEX_ROBOTS } from '@/lib/metadata'
+
+export const metadata: Metadata = {
+  title: 'Checkout complete',
+  description: 'Your purchase was successful.',
+  robots: NO_INDEX_ROBOTS,
+}
 
 type SuccessPageProps = {
   searchParams: Promise<{ session_id?: string }>

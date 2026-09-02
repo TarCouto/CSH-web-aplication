@@ -89,9 +89,15 @@ export function ProfileForm({
           maxLength={120}
         />
       </div>
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="mt-4 text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
       {saved && (
-        <p className="mt-4 text-sm text-neutral-600">Profile updated.</p>
+        <p className="mt-4 text-sm text-neutral-600" role="alert">
+          Profile updated.
+        </p>
       )}
       <Button type="submit" className="mt-10" disabled={loading}>
         {loading ? 'Saving...' : 'Save changes'}

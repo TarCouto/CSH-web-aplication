@@ -3,12 +3,14 @@ import { type Metadata } from 'next'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { ProfileForm } from '@/components/dashboard/ProfileForm'
 import { FadeIn } from '@/components/FadeIn'
+import { NO_INDEX_ROBOTS } from '@/lib/metadata'
 import { createClient } from '@/lib/supabase/server'
 import { getProfile } from '@/server/services/profiles'
 
 export const metadata: Metadata = {
   title: 'Profile',
   description: 'Update your account profile.',
+  robots: NO_INDEX_ROBOTS,
 }
 
 export default async function ProfilePage() {

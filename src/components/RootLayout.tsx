@@ -1,7 +1,8 @@
 'use client'
 
-import { createContext, useContext, useId, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useId, useRef, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 
 import { useIsAuthenticated } from '@/components/auth/AuthSessionProvider'
@@ -126,13 +127,16 @@ function NavigationRow({ children }: { children: React.ReactNode }) {
 function NavigationItem({
   href,
   children,
+  isActive,
 }: {
   href: string
   children: React.ReactNode
+  isActive: boolean
 }) {
   return (
     <Link
       href={href}
+      aria-current={isActive ? 'page' : undefined}
       className="group relative isolate -mx-6 bg-neutral-950 px-6 py-8 even:mt-px sm:mx-0 sm:px-0 sm:py-16 sm:odd:pr-16 sm:even:mt-0 sm:even:border-l sm:even:border-neutral-800 sm:even:pl-16"
     >
       {children}
@@ -143,27 +147,49 @@ function NavigationItem({
 
 function Navigation() {
   const isAuthenticated = useIsAuthenticated()
+  const pathname = usePathname()
 
   return (
     <nav className="mt-px font-display text-3xl font-medium tracking-tight text-white sm:text-5xl">
       <NavigationRow>
-        <NavigationItem href="/work">Our Work</NavigationItem>
-        <NavigationItem href="/about">About Us</NavigationItem>
+        <NavigationItem href="/work" isActive={pathname.startsWith('/work')}>
+          Our Work
+        </NavigationItem>
+        <NavigationItem href="/about" isActive={pathname === '/about'}>
+          About Us
+        </NavigationItem>
       </NavigationRow>
       <NavigationRow>
-        <NavigationItem href="/process">Our Process</NavigationItem>
-        <NavigationItem href="/blog">Blog</NavigationItem>
+        <NavigationItem href="/process" isActive={pathname === '/process'}>
+          Our Process
+        </NavigationItem>
+        <NavigationItem href="/blog" isActive={pathname.startsWith('/blog')}>
+          Blog
+        </NavigationItem>
       </NavigationRow>
       <NavigationRow>
-        <NavigationItem href="/products">Products</NavigationItem>
-        <NavigationItem href="/contact">Contact us</NavigationItem>
+        <NavigationItem href="/products" isActive={pathname.startsWith('/products')}>
+          Products
+        </NavigationItem>
+        <NavigationItem href="/contact" isActive={pathname === '/contact'}>
+          Contact us
+        </NavigationItem>
       </NavigationRow>
       <NavigationRow>
-        <NavigationItem href={isAuthenticated ? '/dashboard' : '/login'}>
+        <NavigationItem
+          href={isAuthenticated ? '/dashboard' : '/login'}
+          isActive={
+            isAuthenticated
+              ? pathname.startsWith('/dashboard')
+              : pathname === '/login'
+          }
+        >
           {isAuthenticated ? 'Dashboard' : 'Log in'}
         </NavigationItem>
         {!isAuthenticated ? (
-          <NavigationItem href="/signup">Sign up</NavigationItem>
+          <NavigationItem href="/signup" isActive={pathname === '/signup'}>
+            Sign up
+          </NavigationItem>
         ) : null}
       </NavigationRow>
     </nav>
@@ -175,6 +201,24 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
   let [expanded, setExpanded] = useState(false)
   let openRef = useRef<React.ElementRef<'button'>>(null)
   let closeRef = useRef<React.ElementRef<'button'>>(null)
+
+  useEffect(() => {
+    if (!expanded) {
+      return
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setExpanded(false)
+        window.setTimeout(() =>
+          openRef.current?.focus({ preventScroll: true }),
+        )
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [expanded])
 
   return (
     <>

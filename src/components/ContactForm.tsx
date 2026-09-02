@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
 import { Button } from '@/components/Button'
 import { FadeIn } from '@/components/FadeIn'
@@ -31,6 +31,35 @@ function TextInput({
   )
 }
 
+function TextAreaInput({
+  label,
+  placeholder,
+  ...props
+}: React.ComponentPropsWithoutRef<'textarea'> & {
+  label: string
+  placeholder?: string
+}) {
+  let id = useId()
+
+  return (
+    <div className="group relative z-0 transition-all focus-within:z-10">
+      <label
+        htmlFor={id}
+        className="absolute top-3 left-6 text-xs font-semibold text-neutral-950"
+      >
+        {label}
+      </label>
+      <textarea
+        id={id}
+        rows={4}
+        {...props}
+        placeholder={placeholder}
+        className="block w-full resize-y border border-neutral-300 bg-transparent px-6 pt-8 pb-3 text-base/6 text-neutral-950 ring-4 ring-transparent transition placeholder:text-neutral-400 group-first:rounded-t-2xl group-last:rounded-b-2xl focus:border-neutral-950 focus:ring-neutral-950/5 focus:outline-hidden"
+      />
+    </div>
+  )
+}
+
 function RadioInput({
   label,
   ...props
@@ -49,6 +78,13 @@ function RadioInput({
 
 export function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const successRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (status === 'sent') {
+      successRef.current?.focus()
+    }
+  }, [status])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -85,7 +121,11 @@ export function ContactForm() {
     return (
       <FadeIn className="lg:order-last">
         <div className="flex h-full items-center justify-center">
-          <div className="text-center">
+          <div
+            ref={successRef}
+            tabIndex={-1}
+            className="text-center outline-hidden"
+          >
             <h2 className="font-display text-2xl font-semibold text-neutral-950">
               Thank you!
             </h2>
@@ -121,7 +161,7 @@ export function ContactForm() {
             placeholder="Acme Inc."
           />
           <TextInput label="Phone" type="tel" name="phone" autoComplete="tel" placeholder="+1 (555) 123-4567" />
-          <TextInput label="Message" name="message" placeholder="Tell us about your project..." required />
+          <TextAreaInput label="Message" name="message" placeholder="Tell us about your project..." required />
           <div className="border border-neutral-300 px-6 py-8 first:rounded-t-2xl last:rounded-b-2xl">
             <fieldset>
               <legend className="text-base/6 text-neutral-500">Budget</legend>
@@ -137,7 +177,7 @@ export function ContactForm() {
           </div>
         </div>
         {status === 'error' && (
-          <p className="mt-4 text-sm text-red-600">
+          <p className="mt-4 text-sm text-red-600" role="alert">
             Something went wrong. Please try again or email us directly.
           </p>
         )}

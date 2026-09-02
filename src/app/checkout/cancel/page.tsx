@@ -1,7 +1,16 @@
+import { type Metadata } from 'next'
+
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
+import { NO_INDEX_ROBOTS } from '@/lib/metadata'
+
+export const metadata: Metadata = {
+  title: 'Checkout canceled',
+  description: 'Your checkout was canceled. No charges were made.',
+  robots: NO_INDEX_ROBOTS,
+}
 
 export default function CheckoutCancelPage() {
   return (

@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { safeRedirectPath, sessionCookieOptions } from '@/lib/auth'
+import { safeRedirectPath, serverSessionCookieOptions } from '@/lib/auth'
 import { getPublicSupabaseConfig, isSupabaseConfigured } from '@/lib/env'
 import { type Database } from '@/lib/supabase/types'
 
@@ -18,13 +18,18 @@ export async function updateSession(request: NextRequest) {
   })
 
   if (!isSupabaseConfigured()) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        'Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.',
+      )
+    }
     return supabaseResponse
   }
 
   const { url, anonKey } = getPublicSupabaseConfig()
 
   const supabase = createServerClient<Database>(url, anonKey, {
-    cookieOptions: sessionCookieOptions,
+    cookieOptions: serverSessionCookieOptions,
     cookies: {
       getAll() {
         return request.cookies.getAll()

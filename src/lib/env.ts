@@ -5,8 +5,24 @@ function required(name: string, value: string | undefined): string {
   return value
 }
 
+function resolveAppUrl(): string {
+  const url = process.env.NEXT_PUBLIC_APP_URL
+  if (!url) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('Missing required environment variable: NEXT_PUBLIC_APP_URL')
+    }
+    return 'http://localhost:3000'
+  }
+  return url
+}
+
+function resolveDownloadLimit(): number {
+  const parsed = Number(process.env.DOWNLOAD_LIMIT ?? 5)
+  return Number.isFinite(parsed) ? parsed : 5
+}
+
 export const env = {
-  appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
+  appUrl: resolveAppUrl(),
 
   supabase: {
     url: process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -27,7 +43,7 @@ export const env = {
     publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
 
-  downloadLimit: Number(process.env.DOWNLOAD_LIMIT ?? 5),
+  downloadLimit: resolveDownloadLimit(),
 }
 
 export function isStripeConfigured() {

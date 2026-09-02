@@ -239,12 +239,52 @@ export type Database = {
           },
         ]
       }
+      rate_limits: {
+        Row: {
+          key: string
+          count: number
+          reset_at: string
+        }
+        Insert: {
+          key: string
+          count?: number
+          reset_at: string
+        }
+        Update: {
+          key?: string
+          count?: number
+          reset_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_download_count: {
+        Args: {
+          entitlement_id: string
+        }
+        Returns: boolean
+      }
+      decrement_download_count: {
+        Args: {
+          entitlement_id: string
+        }
+        Returns: boolean
+      }
+      check_rate_limit: {
+        Args: {
+          p_key: string
+          p_limit: number
+          p_window_seconds: number
+        }
+        Returns: {
+          allowed: boolean
+          retry_after: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

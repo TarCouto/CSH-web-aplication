@@ -1,8 +1,14 @@
+import { type Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 import { DashboardShell } from '@/components/dashboard/DashboardShell'
 import { RootLayout } from '@/components/RootLayout'
+import { NO_INDEX_ROBOTS } from '@/lib/metadata'
 import { createClient } from '@/lib/supabase/server'
+
+export const metadata: Metadata = {
+  robots: NO_INDEX_ROBOTS,
+}
 
 export default async function DashboardLayout({
   children,

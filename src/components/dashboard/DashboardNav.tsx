@@ -21,13 +21,6 @@ function isActiveDashboardLink(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export function getDashboardNavLabel(pathname: string) {
-  return (
-    dashboardLinks.find((link) => isActiveDashboardLink(pathname, link.href))
-      ?.label ?? 'Account'
-  )
-}
-
 function navLinkClassName(isActive: boolean, compact = false) {
   return clsx(
     'shrink-0 rounded-full font-semibold transition',
@@ -48,7 +41,7 @@ export function DashboardNav({
   const pathname = usePathname()
 
   return (
-    <nav className={clsx('flex flex-col gap-2', className)}>
+    <nav aria-label="Dashboard" className={clsx('flex flex-col gap-2', className)}>
       {dashboardLinks.map((link) => {
         const isActive = isActiveDashboardLink(pathname, link.href)
 
@@ -56,6 +49,7 @@ export function DashboardNav({
           <Link
             key={link.href}
             href={link.href}
+            aria-current={isActive ? 'page' : undefined}
             className={navLinkClassName(isActive, compact)}
           >
             {link.label}

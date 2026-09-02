@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server'
 
+import { getClientIp } from '@/lib/get-client-ip'
 import { rateLimit } from '@/lib/rate-limit'
 import { createClient } from '@/lib/supabase/server'
 
 export const runtime = 'nodejs'
-
-function clientIp(request: Request) {
-  const forwarded = request.headers.get('x-forwarded-for')
-  if (forwarded) {
-    return forwarded.split(',')[0]?.trim() || 'unknown'
-  }
-  return request.headers.get('x-real-ip') ?? 'unknown'
-}
 
 export async function POST(request: Request) {
   let email = ''
@@ -35,12 +28,12 @@ export async function POST(request: Request) {
     )
   }
 
-  const ip = clientIp(request)
-  const ipLimit = rateLimit(`login:ip:${ip}`, {
+  const ip = getClientIp(request)
+  const ipLimit = await rateLimit(`login:ip:${ip}`, {
     limit: 10,
     windowMs: 15 * 60 * 1000,
   })
-  const emailLimit = rateLimit(`login:email:${email}`, {
+  const emailLimit = await rateLimit(`login:email:${email}`, {
     limit: 5,
     windowMs: 15 * 60 * 1000,
   })

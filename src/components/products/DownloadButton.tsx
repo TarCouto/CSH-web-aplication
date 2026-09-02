@@ -15,14 +15,17 @@ export function DownloadButton({
 }: DownloadButtonProps) {
   if (disabled) {
     return (
-      <span
+      <button
+        type="button"
+        disabled
+        aria-disabled="true"
         className={clsx(
-          'inline-flex rounded-full px-4 py-1.5 text-sm font-semibold bg-neutral-200 text-neutral-500',
+          'inline-flex cursor-not-allowed rounded-full px-4 py-1.5 text-sm font-semibold bg-neutral-200 text-neutral-500',
           className,
         )}
       >
         Limit reached
-      </span>
+      </button>
     )
   }
 

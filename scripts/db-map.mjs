@@ -1,19 +1,11 @@
 import dotenv from 'dotenv'
 import pg from 'pg'
 
+import { resolvePgClientOptions } from './pg-config.mjs'
+
 dotenv.config({ path: '.env.local' })
 
-const rawConnectionString =
-  process.env.POSTGRES_URL_NON_POOLING ?? process.env.POSTGRES_URL
-
-const connectionString = rawConnectionString
-  .replace(/([?&])sslmode=[^&]*/i, '$1')
-  .replace(/[?&]$/, '')
-
-const client = new pg.Client({
-  connectionString,
-  ssl: { rejectUnauthorized: false },
-})
+const client = new pg.Client(resolvePgClientOptions())
 
 async function run() {
   await client.connect()

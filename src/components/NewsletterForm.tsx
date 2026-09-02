@@ -62,8 +62,8 @@ export function NewsletterForm() {
         Sign up for our newsletter
       </h2>
       <p className="mt-4 text-sm text-neutral-700">
-        Subscribe to get the latest design news, articles, resources and
-        inspiration.
+        Subscribe for engineering insights on web performance, frontend
+        architecture, and building products that scale.
       </p>
       <div className="relative mt-6">
         <input
@@ -88,7 +88,7 @@ export function NewsletterForm() {
         </div>
       </div>
       {status === 'error' && (
-        <p className="mt-4 text-sm text-red-600">
+        <p className="mt-4 text-sm text-red-600" role="alert">
           Something went wrong. Please try again.
         </p>
       )}

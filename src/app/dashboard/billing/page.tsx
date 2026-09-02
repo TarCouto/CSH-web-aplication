@@ -3,6 +3,7 @@ import { type Metadata } from 'next'
 import { BillingPortalButton } from '@/components/dashboard/BillingPortalButton'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { FadeIn } from '@/components/FadeIn'
+import { NO_INDEX_ROBOTS } from '@/lib/metadata'
 import { isStripeConfigured } from '@/lib/env'
 import { createClient } from '@/lib/supabase/server'
 import { getProfile } from '@/server/services/profiles'
@@ -10,6 +11,7 @@ import { getProfile } from '@/server/services/profiles'
 export const metadata: Metadata = {
   title: 'Billing',
   description: 'Manage your Stripe customer and payment methods.',
+  robots: NO_INDEX_ROBOTS,
 }
 
 export default async function BillingPage() {

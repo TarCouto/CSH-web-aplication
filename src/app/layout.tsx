@@ -5,13 +5,12 @@ import { JsonLd } from '@/components/JsonLd'
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { themeInitScript } from '@/components/theme/theme-init'
 import { isSupabaseConfigured } from '@/lib/env'
+import { SITE_URL } from '@/lib/site-url'
 import { createClient } from '@/lib/supabase/server'
 import '@/styles/tailwind.css'
 
-const BASE_URL = 'https://couto.software'
-
 export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
+  metadataBase: new URL(SITE_URL),
   title: {
     template: '%s - Couto Software House',
     default: 'Couto Software House - High-Performance Web Applications',
@@ -21,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: BASE_URL,
+    url: SITE_URL,
     siteName: 'Couto Software House',
     title: 'Couto Software House - High-Performance Web Applications',
     description:
@@ -43,9 +42,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  alternates: {
-    canonical: BASE_URL,
   },
   verification: {
     google: 'MrKKzQ_BpfvXsWmtmZaozaix2PFMKaRNLVXO-UafSps',
@@ -76,7 +72,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'Couto Software House',
-            url: BASE_URL,
+            url: SITE_URL,
             description:
               'Brazilian software engineering company specializing in high-performance web applications.',
             foundingDate: '2021',

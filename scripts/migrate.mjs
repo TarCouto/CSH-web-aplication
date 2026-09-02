@@ -5,27 +5,14 @@ import { fileURLToPath } from 'node:url'
 import dotenv from 'dotenv'
 import pg from 'pg'
 
+import { resolvePgClientOptions } from './pg-config.mjs'
+
 dotenv.config({ path: '.env.local' })
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const migrationsDir = join(__dirname, '..', 'supabase', 'migrations')
 
-const rawConnectionString =
-  process.env.POSTGRES_URL_NON_POOLING ?? process.env.POSTGRES_URL
-
-if (!rawConnectionString) {
-  console.error('Missing POSTGRES_URL_NON_POOLING (or POSTGRES_URL) in .env.local')
-  process.exit(1)
-}
-
-const connectionString = rawConnectionString
-  .replace(/([?&])sslmode=[^&]*/i, '$1')
-  .replace(/[?&]$/, '')
-
-const client = new pg.Client({
-  connectionString,
-  ssl: { rejectUnauthorized: false },
-})
+const client = new pg.Client(resolvePgClientOptions())
 
 async function ensureMigrationsTable() {
   await client.query(`
@@ -33,6 +20,9 @@ async function ensureMigrationsTable() {
       version text primary key,
       applied_at timestamptz not null default now()
     );
+  `)
+  await client.query(`
+    alter table public.schema_migrations enable row level security;
   `)
 }
 

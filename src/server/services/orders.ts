@@ -52,24 +52,129 @@ async function uniqueSlug(
   }
 }
 
+function isCheckoutFulfilled(session: Stripe.Checkout.Session): boolean {
+  return (
+    session.payment_status === 'paid' ||
+    session.payment_status === 'no_payment_required'
+  )
+}
+
+async function ensureEntitlement(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  productId: string,
+  orderId: string,
+  downloadLimit: number,
+): Promise<void> {
+  const { error: entitlementError } = await supabase.from('entitlements').upsert(
+    {
+      user_id: userId,
+      product_id: productId,
+      order_id: orderId,
+      download_limit: downloadLimit,
+      download_count: 0,
+    },
+    { onConflict: 'user_id,product_id', ignoreDuplicates: true },
+  )
+
+  if (entitlementError) {
+    throw entitlementError
+  }
+}
+
+async function sendPurchaseEmail(
+  supabase: SupabaseClient<Database>,
+  session: Stripe.Checkout.Session,
+  productId: string,
+): Promise<void> {
+  const buyerEmail = session.customer_details?.email
+
+  if (!buyerEmail) return
+
+  try {
+    const { data: product } = await supabase
+      .from('products')
+      .select('name, slug')
+      .eq('id', productId)
+      .maybeSingle()
+
+    const productName = product?.name ?? 'Your product'
+    const amountLabel = formatPrice(
+      session.amount_total ?? 0,
+      session.currency ?? 'usd',
+    )
+    const dashboardUrl = `${env.appUrl}/dashboard`
+    const html = buildPurchaseEmailHtml({
+      productName,
+      amountLabel,
+      dashboardUrl,
+    })
+
+    await sendEmail({
+      to: buyerEmail,
+      subject: `Your purchase: ${productName}`,
+      html,
+    })
+  } catch (error) {
+    console.error('Purchase confirmation email failed:', error)
+  }
+}
+
 export async function fulfillCheckoutSession(
   supabase: SupabaseClient<Database>,
   session: Stripe.Checkout.Session,
   downloadLimit: number,
 ): Promise<void> {
+  if (!isCheckoutFulfilled(session)) {
+    console.error(
+      'Skipping checkout fulfillment: payment not completed',
+      {
+        sessionId: session.id,
+        paymentStatus: session.payment_status,
+      },
+    )
+    return
+  }
+
   const userId =
     session.metadata?.userId ?? session.client_reference_id ?? null
   const productId = session.metadata?.productId ?? null
 
-  if (!userId || !productId) return
+  if (!userId || !productId) {
+    console.error('Checkout session missing required metadata', {
+      sessionId: session.id,
+      userId: userId ?? undefined,
+      productId: productId ?? undefined,
+    })
+    return
+  }
 
-  const { data: existing } = await supabase
+  const { data: existingOrder } = await supabase
     .from('orders')
     .select('id')
     .eq('stripe_checkout_session_id', session.id)
     .maybeSingle()
 
-  if (existing) return
+  if (existingOrder) {
+    const { data: existingEntitlement } = await supabase
+      .from('entitlements')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('product_id', productId)
+      .maybeSingle()
+
+    if (existingEntitlement) return
+
+    await ensureEntitlement(
+      supabase,
+      userId,
+      productId,
+      existingOrder.id,
+      downloadLimit,
+    )
+    await sendPurchaseEmail(supabase, session, productId)
+    return
+  }
 
   const paymentIntent =
     typeof session.payment_intent === 'string'
@@ -94,20 +199,13 @@ export async function fulfillCheckoutSession(
     throw orderError ?? new Error('Failed to create order')
   }
 
-  const { error: entitlementError } = await supabase.from('entitlements').upsert(
-    {
-      user_id: userId,
-      product_id: productId,
-      order_id: order.id,
-      download_limit: downloadLimit,
-      download_count: 0,
-    },
-    { onConflict: 'user_id,product_id', ignoreDuplicates: true },
+  await ensureEntitlement(
+    supabase,
+    userId,
+    productId,
+    order.id,
+    downloadLimit,
   )
-
-  if (entitlementError) {
-    throw entitlementError
-  }
 
   const customerId =
     typeof session.customer === 'string'
@@ -121,37 +219,7 @@ export async function fulfillCheckoutSession(
       .eq('id', userId)
   }
 
-  const buyerEmail = session.customer_details?.email
-
-  if (buyerEmail) {
-    try {
-      const { data: product } = await supabase
-        .from('products')
-        .select('name, slug')
-        .eq('id', productId)
-        .maybeSingle()
-
-      const productName = product?.name ?? 'Your product'
-      const amountLabel = formatPrice(
-        session.amount_total ?? 0,
-        session.currency ?? 'usd',
-      )
-      const dashboardUrl = `${env.appUrl}/dashboard`
-      const html = buildPurchaseEmailHtml({
-        productName,
-        amountLabel,
-        dashboardUrl,
-      })
-
-      await sendEmail({
-        to: buyerEmail,
-        subject: `Your purchase: ${productName}`,
-        html,
-      })
-    } catch (error) {
-      console.error('Purchase confirmation email failed:', error)
-    }
-  }
+  await sendPurchaseEmail(supabase, session, productId)
 }
 
 export async function syncStripeProduct(
@@ -211,4 +279,103 @@ export async function syncStripePrice(
     .eq('stripe_product_id', stripeProductId)
 
   if (error) throw error
+}
+
+export async function handleRefund(
+  stripe: Stripe,
+  supabase: SupabaseClient<Database>,
+  charge: Stripe.Charge,
+  options?: { skipPartialCheck?: boolean },
+): Promise<void> {
+  if (
+    !options?.skipPartialCheck &&
+    charge.amount_refunded < charge.amount
+  ) {
+    console.error('handleRefund: partial refund — entitlement preserved', {
+      chargeId: charge.id,
+      amount: charge.amount,
+      amountRefunded: charge.amount_refunded,
+    })
+    return
+  }
+
+  const paymentIntentId =
+    typeof charge.payment_intent === 'string'
+      ? charge.payment_intent
+      : (charge.payment_intent?.id ?? null)
+
+  if (!paymentIntentId) {
+    console.error('handleRefund: charge missing payment_intent', {
+      chargeId: charge.id,
+    })
+    return
+  }
+
+  let userId: string
+  let productId: string
+  let orderId: string
+
+  const { data: order } = await supabase
+    .from('orders')
+    .select('id, user_id, product_id, status')
+    .eq('stripe_payment_intent', paymentIntentId)
+    .maybeSingle()
+
+  if (order) {
+    if (order.status === 'refunded') return
+
+    orderId = order.id
+    userId = order.user_id
+    productId = order.product_id
+  } else {
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+    const metadataUserId = paymentIntent.metadata?.userId
+    const metadataProductId = paymentIntent.metadata?.productId
+
+    if (!metadataUserId || !metadataProductId) {
+      console.error('handleRefund: order not found and metadata missing', {
+        chargeId: charge.id,
+        paymentIntentId,
+      })
+      return
+    }
+
+    const { data: orderByMeta } = await supabase
+      .from('orders')
+      .select('id, status')
+      .eq('user_id', metadataUserId)
+      .eq('product_id', metadataProductId)
+      .eq('status', 'paid')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (!orderByMeta) {
+      console.error('handleRefund: no matching paid order', {
+        chargeId: charge.id,
+        userId: metadataUserId,
+        productId: metadataProductId,
+      })
+      return
+    }
+
+    orderId = orderByMeta.id
+    userId = metadataUserId
+    productId = metadataProductId
+  }
+
+  const { error: orderUpdateError } = await supabase
+    .from('orders')
+    .update({ status: 'refunded' })
+    .eq('id', orderId)
+
+  if (orderUpdateError) throw orderUpdateError
+
+  const { error: entitlementDeleteError } = await supabase
+    .from('entitlements')
+    .delete()
+    .eq('user_id', userId)
+    .eq('product_id', productId)
+
+  if (entitlementDeleteError) throw entitlementDeleteError
 }

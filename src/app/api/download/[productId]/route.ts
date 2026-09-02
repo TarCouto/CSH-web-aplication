@@ -1,14 +1,17 @@
 import { NextResponse } from 'next/server'
 
 import { env } from '@/lib/env'
+import { getClientIp } from '@/lib/get-client-ip'
 import { rateLimit } from '@/lib/rate-limit'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { isValidUuid } from '@/lib/validation'
 import {
   buildFingerprint,
   ZipStorageProvider,
 } from '@/server/services/delivery'
 import {
+  decrementDownloadCount,
   getEntitlement,
   incrementDownloadCount,
 } from '@/server/services/entitlements'
@@ -19,8 +22,16 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ productId: string }> },
 ) {
+  let reservedEntitlementId: string | null = null
+  let serviceClient: ReturnType<typeof createServiceClient> | null = null
+
   try {
     const { productId } = await params
+
+    if (!isValidUuid(productId)) {
+      return new NextResponse('Product not found.', { status: 404 })
+    }
+
     const supabase = await createClient()
     const {
       data: { user },
@@ -32,7 +43,7 @@ export async function GET(
       )
     }
 
-    const { allowed, resetAt } = rateLimit(`download:${user.id}`, {
+    const { allowed, resetAt } = await rateLimit(`download:${user.id}`, {
       limit: 10,
       windowMs: 60000,
     })
@@ -59,11 +70,18 @@ export async function GET(
       })
     }
 
-    if (entitlement.download_count >= entitlement.download_limit) {
+    serviceClient = createServiceClient()
+
+    const incremented = await incrementDownloadCount(
+      serviceClient,
+      entitlement.id,
+    )
+
+    if (!incremented) {
       return new NextResponse('Download limit reached', { status: 403 })
     }
 
-    const serviceClient = createServiceClient()
+    reservedEntitlementId = entitlement.id
 
     const { data: product, error: productError } = await serviceClient
       .from('products')
@@ -72,6 +90,8 @@ export async function GET(
       .maybeSingle()
 
     if (productError || !product?.storage_path) {
+      await decrementDownloadCount(serviceClient, entitlement.id)
+      reservedEntitlementId = null
       return new NextResponse('Product not available for download.', {
         status: 404,
       })
@@ -96,7 +116,7 @@ export async function GET(
       fingerprint,
     })
 
-    const ip = request.headers.get('x-forwarded-for')
+    const ip = getClientIp(request)
     const userAgent = request.headers.get('user-agent')
 
     const { error: downloadError } = await serviceClient
@@ -110,14 +130,10 @@ export async function GET(
       })
 
     if (downloadError) {
-      throw downloadError
+      console.error('Download audit log failed:', downloadError)
     }
 
-    await incrementDownloadCount(
-      serviceClient,
-      entitlement.id,
-      entitlement.download_count,
-    )
+    reservedEntitlementId = null
 
     return new NextResponse(new Uint8Array(result.buffer), {
       headers: {
@@ -127,6 +143,14 @@ export async function GET(
       },
     })
   } catch (error) {
+    if (reservedEntitlementId && serviceClient) {
+      try {
+        await decrementDownloadCount(serviceClient, reservedEntitlementId)
+      } catch (rollbackError) {
+        console.error('Download quota rollback failed:', rollbackError)
+      }
+    }
+
     console.error('Download failed:', error)
     return new NextResponse('Download failed. Please try again later.', {
       status: 500,

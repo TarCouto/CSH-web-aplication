@@ -3,12 +3,14 @@ import { type Metadata } from 'next'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { PurchasedProductsList } from '@/components/dashboard/PurchasedProductsList'
 import { FadeIn } from '@/components/FadeIn'
+import { NO_INDEX_ROBOTS } from '@/lib/metadata'
 import { createClient } from '@/lib/supabase/server'
 import { listUserEntitlements } from '@/server/services/entitlements'
 
 export const metadata: Metadata = {
   title: 'My products',
   description: 'Download the boilerplates you purchased.',
+  robots: NO_INDEX_ROBOTS,
 }
 
 export default async function LibraryPage() {

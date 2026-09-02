@@ -34,7 +34,11 @@ export function BillingPortalButton({ disabled }: { disabled?: boolean }) {
       <Button type="button" onClick={handleClick} disabled={disabled || loading}>
         {loading ? 'Opening...' : 'Manage billing'}
       </Button>
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="mt-4 text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   )
 }

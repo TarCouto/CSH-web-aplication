@@ -47,14 +47,29 @@ export async function getEntitlement(
 export async function incrementDownloadCount(
   supabase: SupabaseClient<Database>,
   entitlementId: string,
-  current: number,
-): Promise<void> {
-  const { error } = await supabase
-    .from('entitlements')
-    .update({ download_count: current + 1 })
-    .eq('id', entitlementId)
+): Promise<boolean> {
+  const { data, error } = await supabase.rpc('increment_download_count', {
+    entitlement_id: entitlementId,
+  })
 
   if (error) {
     throw error
   }
+
+  return data === true
+}
+
+export async function decrementDownloadCount(
+  supabase: SupabaseClient<Database>,
+  entitlementId: string,
+): Promise<boolean> {
+  const { data, error } = await supabase.rpc('decrement_download_count', {
+    entitlement_id: entitlementId,
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return data === true
 }

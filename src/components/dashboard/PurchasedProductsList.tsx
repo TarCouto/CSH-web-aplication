@@ -57,7 +57,14 @@ export function PurchasedProductsList({
                 {entitlement.download_count}/{entitlement.download_limit}{' '}
                 downloads
               </p>
-              <div className="mt-4 h-1 overflow-hidden rounded-full bg-neutral-200">
+              <div
+                className="mt-4 h-1 overflow-hidden rounded-full bg-neutral-200"
+                role="progressbar"
+                aria-valuenow={entitlement.download_count}
+                aria-valuemin={0}
+                aria-valuemax={entitlement.download_limit}
+                aria-label={`Download quota: ${entitlement.download_count} of ${entitlement.download_limit} used`}
+              >
                 <div
                   className="h-full rounded-full bg-neutral-950"
                   style={{ width: `${progress}%` }}

@@ -6,8 +6,9 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
-    "test": "node --test",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/run-tests.mjs",
     "db:migrate": "node scripts/migrate.mjs"
   },
   "browserslist": "defaults, not ie <= 11",
@@ -27,7 +28,6 @@
     "clsx": "^2.1.1",
     "escape-string-regexp": "^5.0.0",
     "fast-glob": "^3.3.3",
-    "framer-motion": "^12.23.11",
     "next": "16.1.6",
     "nodemailer": "^9.1.0",
     "react": "19.2.4",
@@ -55,7 +55,8 @@
     "pg": "^8.23.0",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "sharp": "0.34.3"
+    "sharp": "0.34.3",
+    "tsx": "^4.20.5"
   },
   "overrides": {
     "@types/react": "19.2.14",

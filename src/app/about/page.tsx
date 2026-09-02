@@ -86,7 +86,7 @@ export default async function About() {
         <StatList>
           <StatListItem value="4+" label="Years of experience" />
           <StatListItem value="50+" label="Projects delivered" />
-          <StatListItem value="100%" label="Client satisfaction" />
+          <StatListItem value="98%" label="Client satisfaction" />
         </StatList>
       </Container>
 
@@ -95,7 +95,7 @@ export default async function About() {
       <PageLinks
         className="mt-24 sm:mt-32 lg:mt-40"
         title="From the blog"
-        intro="Our team of experienced designers and developers has just one thing on their mind; working on your ideas to draw a smile on the face of your users worldwide. From conducting Brand Sprints to UX Design."
+        intro="Practical insights on web performance, frontend architecture, and building products that scale — from the engineers at Couto Software House."
         pages={blogArticles}
       />
 

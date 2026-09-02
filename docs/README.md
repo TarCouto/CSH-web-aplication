@@ -25,6 +25,7 @@ Documentação técnica da aplicação web institucional da **Couto Software Hou
 | 12 | [Banco de dados (DBA)](./12-database.md) | Schema, RLS, triggers, storage, migrations versionadas |
 | 13 | [Stripe — setup](./13-stripe-setup.md) | Arquitetura Stripe, Products/Prices, webhook, VAT, chaves |
 | 14 | [Auth emails](./14-auth-emails.md) | SMTP Zoho no Auth, templates com domínio couto.software |
+| 15 | [Plano de correções](./15-plano-de-correcoes.md) | Plano de execução da auditoria 2026-09 para agentes de codificação |
 
 ---
 

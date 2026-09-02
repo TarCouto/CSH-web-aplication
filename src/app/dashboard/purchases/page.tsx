@@ -3,12 +3,14 @@ import { type Metadata } from 'next'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { PurchasesTable } from '@/components/dashboard/PurchasesTable'
 import { FadeIn } from '@/components/FadeIn'
+import { NO_INDEX_ROBOTS } from '@/lib/metadata'
 import { createClient } from '@/lib/supabase/server'
 import { listUserOrders } from '@/server/services/orders'
 
 export const metadata: Metadata = {
   title: 'Purchases',
   description: 'Your boilerplate purchase history.',
+  robots: NO_INDEX_ROBOTS,
 }
 
 export default async function PurchasesPage() {

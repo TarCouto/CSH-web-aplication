@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/Button'
@@ -38,6 +38,13 @@ export function SignupForm() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
+  const successRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (confirmed) {
+      successRef.current?.focus()
+    }
+  }, [confirmed])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -75,7 +82,11 @@ export function SignupForm() {
   if (confirmed) {
     return (
       <FadeIn>
-        <div className="text-center">
+        <div
+          ref={successRef}
+          tabIndex={-1}
+          className="text-center outline-hidden"
+        >
           <h2 className="font-display text-2xl font-semibold text-neutral-950">
             Check your email
           </h2>
@@ -109,7 +120,9 @@ export function SignupForm() {
           />
         </div>
         {error && (
-          <p className="mt-4 text-sm text-red-600">{error}</p>
+          <p className="mt-4 text-sm text-red-600" role="alert">
+            {error}
+          </p>
         )}
         <Button type="submit" className="mt-10" disabled={loading}>
           {loading ? 'Creating account...' : 'Create account'}

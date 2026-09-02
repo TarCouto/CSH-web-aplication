@@ -1,21 +1,53 @@
 import { NextResponse } from 'next/server'
 
 import { buildNewsletterEmailHtml, sendEmail } from '@/lib/email'
+import { getClientIp } from '@/lib/get-client-ip'
+import { rateLimit } from '@/lib/rate-limit'
+import { isValidEmail } from '@/lib/validation'
+
+const TEN_MINUTES_MS = 10 * 60 * 1000
+
+function invalidPayloadResponse() {
+  return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+}
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request)
+    const limit = await rateLimit(`newsletter:ip:${ip}`, {
+      limit: 3,
+      windowMs: TEN_MINUTES_MS,
+    })
+
+    if (!limit.allowed) {
+      const retryAfter = Math.max(
+        1,
+        Math.ceil((limit.resetAt - Date.now()) / 1000),
+      )
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(retryAfter) },
+        },
+      )
+    }
+
     const body = await request.json()
     const { email } = body
 
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+    if (typeof email !== 'string') {
+      return invalidPayloadResponse()
     }
 
     const normalizedEmail = email.trim().toLowerCase()
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    if (!emailPattern.test(normalizedEmail)) {
-      return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
+    if (!normalizedEmail || normalizedEmail.length > 320) {
+      return invalidPayloadResponse()
+    }
+
+    if (!isValidEmail(normalizedEmail)) {
+      return invalidPayloadResponse()
     }
 
     await sendEmail({
@@ -25,7 +57,8 @@ export async function POST(request: Request) {
     })
 
     return NextResponse.json({ success: true })
-  } catch {
+  } catch (error) {
+    console.error('Newsletter subscription failed:', error)
     return NextResponse.json(
       { error: 'Failed to subscribe' },
       { status: 500 },
