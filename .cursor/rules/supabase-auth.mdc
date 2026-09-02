@@ -1,0 +1,68 @@
+---
+description: Supabase Auth rules — email confirmation, OTP tokens, PKCE, sessions
+globs: src/app/api/auth/**,src/app/auth/**,src/app/signup/**,src/app/confirm/**,src/components/auth/**,src/lib/supabase/**,src/lib/auth.ts,src/lib/verify-email-otp.ts,supabase/templates/**
+alwaysApply: false
+---
+
+# Supabase Auth — do not repeat these mistakes
+
+This project already hit (and fixed) two subtle auth bugs. Read this before touching
+signup, login, email confirmation, magic links, password reset, or Supabase clients.
+
+## Golden rules
+
+1. **Never call `verifyOtp` / `exchangeCodeForSession` on a `GET` request that an email
+   link opens.** Email scanners (Gmail, Outlook SafeLinks) prefetch links and would
+   consume the one-time token before the user clicks. Email links must land on a page
+   that shows a **button**; verification happens on the resulting `POST`.
+   - Pattern: `GET /auth/confirm` only redirects → `/signup/confirm` or `/confirm`
+     (button page) → `POST /api/auth/confirm` runs `verifyOtp`.
+
+2. **Email confirmation must work cross-device.** People sign up on desktop and open the
+   email on their phone. Any flow that only works on the originating browser is a bug.
+
+3. **`@supabase/ssr` forces `flowType: 'pkce'` (cannot be overridden).** A `signUp` /
+   magic link / recovery generated with the ssr client produces a `token_hash` prefixed
+   with **`pkce_`**, which can ONLY be verified with the `code_verifier` cookie stored in
+   the originating browser. Opening the link elsewhere → **403 "User from sub claim..."**
+   / "One-time token not found" on `/auth/v1/verify`.
+   - **Fix / required pattern:** generate and verify email OTPs with a **non-PKCE**
+     client: `createOtpClient()` in `src/lib/supabase/auth-otp-client.ts`
+     (`@supabase/supabase-js` with `flowType: 'implicit'`, `persistSession: false`).
+   - `signUp` runs server-side in `POST /api/auth/signup` using that client.
+   - **Sanity check:** a correct confirmation link's `token_hash` must NOT start with
+     `pkce_`. If you see `pkce_`, the wrong client generated it.
+
+4. **Which Supabase client to use where:**
+   | Use case | Client | File |
+   |----------|--------|------|
+   | Server components / route handlers needing the user session | `createClient()` (ssr, PKCE) | `src/lib/supabase/server.ts` |
+   | Browser components | `createClient()` (ssr, PKCE) | `src/lib/supabase/client.ts` |
+   | Proxy/session refresh | ssr | `src/lib/supabase/middleware.ts` |
+   | **Email OTP: signUp, verifyOtp, magic link, recovery** | **`createOtpClient()` (implicit, non-PKCE)** | `src/lib/supabase/auth-otp-client.ts` |
+   | Admin / bypass RLS (server only) | `createServiceClient()` | `src/lib/supabase/service.ts` |
+
+5. **Email templates** (`supabase/templates/`): use `{{ .SiteURL }}` + `{{ .TokenHash }}`,
+   never `{{ .ConfirmationURL }}` (it ties the link to `/auth/callback?code=...` + PKCE).
+   Point links at the button pages:
+   - Confirm signup → `/signup/confirm?token_hash=...&type=signup&next=/signup/confirmed`
+   - Magic link → `/confirm?token_hash=...&type=email&next=/dashboard`
+   - Reset password → `/confirm?token_hash=...&type=recovery&next=/dashboard/profile`
+   - After editing a template file, the value must be **pasted into the Supabase
+     dashboard** (Authentication → Email Templates); the repo file is not auto-synced.
+
+6. **Stale sessions:** when `getUser()` returns an error matching `isStaleAuthError`
+   (`src/lib/auth.ts`), call `supabase.auth.signOut()` to clear the invalid JWT and stop
+   the `403 GET /user` log spam. Already done in `middleware.ts` and `app/layout.tsx`.
+
+7. **Redirects after auth:** always sanitize with `safeRedirectPath` before redirecting.
+
+## Before you ship an auth change
+
+- [ ] No `verifyOtp`/`exchangeCodeForSession` on a GET that an email link opens.
+- [ ] Email OTP generation + verification uses the non-PKCE `createOtpClient()`.
+- [ ] Generated `token_hash` does not start with `pkce_`.
+- [ ] Manually test the link **on a second device / different browser**.
+- [ ] Template files updated AND pasted into the Supabase dashboard.
+- [ ] `npm run typecheck && npm run lint && npm test` pass.
+- [ ] `docs/14-auth-emails.md` and `docs/03-routes-and-pages.md` updated if routes changed.

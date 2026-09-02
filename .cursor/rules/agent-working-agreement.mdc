@@ -1,0 +1,62 @@
+---
+description: Working agreement for AI agents — plan, verify libraries, think full runtime path
+alwaysApply: true
+---
+
+# Agent working agreement (read before planning or coding)
+
+Mirror of `CLAUDE.md`. This exists to prevent the subtle mistakes that already cost real
+debugging time on this project. Apply it on every task.
+
+## 1. Plan before coding
+
+1. **Read the docs first** — start at `docs/README.md`, then the docs relevant to the task
+   (`03-routes-and-pages.md`, `14-auth-emails.md`, architecture, API, database…).
+2. **Read the relevant rules** in `.cursor/rules/` — always `architecture-and-docs`, and
+   `supabase-auth` for anything auth-related.
+3. **Follow existing patterns** — match how similar pages, API routes, services, and
+   clients are already built. Do not invent parallel structures. For any visual /
+   layout / mobile work, follow `.cursor/skills/senior-ui-ux/SKILL.md` and
+   `src/lib/spacing.ts`.
+4. **State assumptions explicitly** and validate the risky ones before writing lots of code.
+
+## 2. Verify library behavior — do not assume
+
+Most bugs here came from *assuming* how a library works instead of checking.
+
+- When a third-party library (Supabase, Stripe, Next.js) drives the flow, **confirm the
+  actual behavior** (official docs / release notes / source) before relying on it.
+- Be especially careful with **defaults you did not set** (e.g. `@supabase/ssr` forcing
+  PKCE). A "recommended" client is not automatically right for every flow.
+- Use the **current year** in web/doc searches; APIs change.
+
+## 3. Think about the full runtime path, not just the happy path
+
+Before shipping, ask:
+
+- **Who / what else touches this URL or token?** Email scanners prefetch links (Gmail,
+  Outlook SafeLinks), plus webmail, mobile, retries, double-clicks.
+- **Cross-device / cross-browser:** does an email link work opened on another device?
+- **One-time tokens:** never consume them on an automated `GET`.
+- **Idempotency:** can this run twice safely (webhooks, retries)?
+- **Stale/invalid sessions:** handle the error branch, don't just read the happy value.
+
+## 4. Auth is a landmine — dedicated rule is mandatory
+
+For anything auth-related, follow `.cursor/rules/supabase-auth.mdc`. Non-negotiables:
+
+- Email OTPs (signup, magic link, recovery) are generated **and** verified with the
+  non-PKCE `createOtpClient()` (`src/lib/supabase/auth-otp-client.ts`), never the
+  `@supabase/ssr` client (which forces PKCE and breaks cross-device links).
+- A correct confirmation `token_hash` must **not** start with `pkce_`.
+- Email links open a **button page**; verification runs on the button's `POST`, never on
+  the initial `GET`.
+
+## 5. Definition of done
+
+- [ ] Followed existing patterns; no parallel/duplicate structures.
+- [ ] Verified any library behavior the change depends on.
+- [ ] Considered scanners, cross-device, retries, and error branches.
+- [ ] `npm run typecheck`, `npm run lint`, and `npm test` all pass.
+- [ ] Updated the matching `docs/` file when behavior or routes changed.
+- [ ] For auth changes: completed the checklist in `.cursor/rules/supabase-auth.mdc`.
