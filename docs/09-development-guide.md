@@ -6,6 +6,7 @@
 npm install
 cp .env.example .env.local
 # Configurar credenciais Zoho em .env.local
+# Node.js 22: nvm use (lê .nvmrc)
 npm run dev
 ```
 

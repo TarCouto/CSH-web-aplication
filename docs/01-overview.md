@@ -19,6 +19,7 @@ Baseado no template comercial **Tailwind Plus Studio**, customizado com conteúd
 
 | Camada | Tecnologia | Versão |
 |--------|------------|--------|
+| Runtime | Node.js | 22.x |
 | Framework | Next.js (App Router) | 16.1.6 |
 | UI | React | 19.2.4 |
 | Linguagem | TypeScript | 5.8+ |

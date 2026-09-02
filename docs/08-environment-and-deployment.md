@@ -36,6 +36,9 @@ npm install
 cp .env.example .env.local
 # Editar .env.local com credenciais Zoho
 
+# Node.js 22 (nvm: nvm use)
+# Vercel: Project Settings → Node.js Version → 22.x
+
 # 3. Rodar
 npm run dev
 # → http://localhost:3000
@@ -62,7 +65,7 @@ Na Vercel, cole **sem aspas**.
 | Framework | Next.js |
 | Build command | `npm run build` |
 | Output | `.next` (default) |
-| Node.js | 20.x+ |
+| Node.js | **22.x** (CI, Vercel e `.nvmrc`) |
 | Branch de produção | `main` |
 
 ### Checklist de deploy
