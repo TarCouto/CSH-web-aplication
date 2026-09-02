@@ -157,7 +157,7 @@ Checkout **grátis** (`amount_total = 0` / `no_payment_required`) também fulfil
 | `payment_intent_data.metadata` | mesmo par — usado em refund se o order não achar o PI |
 | `billing_address_collection` | `required` — endereço na fatura e no cálculo de VAT |
 | `tax_id_collection` | `{ enabled: true }` — VAT ID opcional (B2B reverse charge) |
-| `automatic_tax` | `{ enabled: true }` — Stripe Tax (Dashboard precisa estar ligado) |
+| `automatic_tax` | `{ enabled: false }` — Stripe Tax ainda não existe para contas BR |
 | `invoice_creation` | `{ enabled: true }` — fatura PDF pós-pagamento |
 
 Dois e-mails depois do pagamento: **fatura Stripe** (comprovante/VAT) e **Zoho** (link do dashboard). Não misturar os papéis.

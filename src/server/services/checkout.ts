@@ -124,7 +124,9 @@ export function buildCheckoutSessionParams(params: {
     client_reference_id: userId,
     billing_address_collection: 'required',
     tax_id_collection: { enabled: true },
-    automatic_tax: { enabled: true },
+    // Stripe Tax is not available for BR accounts yet; enabling this
+    // makes checkout.sessions.create fail.
+    automatic_tax: { enabled: false },
     invoice_creation: { enabled: true },
     ...(customerId
       ? {

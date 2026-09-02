@@ -24,7 +24,7 @@ describe('buildCheckoutSessionParams', () => {
     stripe_price_id: 'price_123',
   } as const
 
-  it('creates an invoice, collects tax id, and enables Stripe Tax', () => {
+  it('creates an invoice and collects tax id without Stripe Tax', () => {
     const params = buildCheckoutSessionParams({
       product: product as never,
       userId: 'user-1',
@@ -34,7 +34,7 @@ describe('buildCheckoutSessionParams', () => {
 
     assert.equal(params.invoice_creation?.enabled, true)
     assert.equal(params.tax_id_collection?.enabled, true)
-    assert.equal(params.automatic_tax?.enabled, true)
+    assert.equal(params.automatic_tax?.enabled, false)
     assert.equal(params.billing_address_collection, 'required')
   })
 

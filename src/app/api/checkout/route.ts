@@ -7,6 +7,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { isValidUuid } from '@/lib/validation'
 import { getOrCreateStripeCustomer } from '@/server/services/billing'
 import { createCheckoutSession } from '@/server/services/checkout'
+import { getPublishedProductForCheckout } from '@/server/services/products'
 import { getProfile } from '@/server/services/profiles'
 
 export const runtime = 'nodejs'
@@ -29,12 +30,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 })
     }
 
-    const { data: product } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', productId)
-      .eq('status', 'published')
-      .maybeSingle()
+    const service = createServiceClient()
+    const product = await getPublishedProductForCheckout(service, productId)
 
     if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 })
@@ -42,7 +39,6 @@ export async function POST(request: Request) {
 
     const stripe = getStripe()
     const profile = await getProfile(supabase, user.id)
-    const service = createServiceClient()
     const customerId = user.email
       ? await getOrCreateStripeCustomer(stripe, service, {
           userId: user.id,

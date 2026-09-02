@@ -196,6 +196,9 @@ As migrations são arquivos SQL em `supabase/migrations/`, aplicados em ordem al
 | `0001_init.sql` | tabelas, RLS, triggers, funções |
 | `0002_storage.sql` | bucket privado `products` |
 | `0003_profile_billing.sql` | `profiles.stripe_customer_id` |
+| `0004_hardening.sql` | RLS de `profiles`, RPC de download, policies de orders |
+
+Catálogo (MeterKit + IDs Stripe de Test) **não** é migration. Fica em `supabase/seeds/` — `npm run db:seed`. Idempotente; não registra em `schema_migrations`.
 
 ### Runner
 

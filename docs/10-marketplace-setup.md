@@ -32,6 +32,22 @@ Alternativas:
 
 Detalhes completos do schema, RLS e workflow de migrations em [12 — Banco de dados (DBA)](./12-database.md).
 
+## Seed do catálogo (MeterKit)
+
+Schema **não** leva IDs de Test do Stripe. O catálogo vai em `supabase/seeds/` e corre à parte:
+
+```bash
+npm run db:seed
+```
+
+`0001_meterkit.sql` faz upsert do slug `meterkit` com o Price de Test (`price_1UBJ1vPYevgYGEkJ8gR5fZ94`). Status fica `draft` até o ZIP estar no bucket. Em Live, troca os `prod_` / `price_` no seed **antes** de rodar no banco de produção.
+
+Placeholder de entrega (ZIP no Storage + `published`):
+
+```bash
+npm run db:seed:zip
+```
+
 ## Bucket de storage
 
 O bucket `products` é **privado** (`public = false`). Arquivos `.zip` dos boilerplates ficam lá; o browser nunca acessa o bucket diretamente. URLs assinadas são geradas no servidor via `createServiceClient()` (service role).

@@ -72,7 +72,7 @@ Como o webhook `product.created`/`price.created` **cria um rascunho** no Supabas
 4. status = 'published'  → aparece em /products e fica comprável
 ```
 
-Alternativa (sem depender do webhook para criar): cadastrar direto no Supabase via seed e colar `stripe_product_id`/`stripe_price_id` manualmente. Útil em dev.
+Alternativa (sem depender do webhook para criar): `npm run db:seed` aplica `supabase/seeds/0001_meterkit.sql` (upsert do slug `meterkit` + Price de Test). Útil em dev. Em Live, use o `prod_` / `price_` de Live.
 
 ---
 
@@ -116,7 +116,7 @@ Vender **produto digital** para a UE tem regras de VAT:
 3. Defina o **tax behavior** dos Prices (inclusive/exclusive) de forma consistente.
 4. Registre-se onde for obrigado (ex.: **VAT OSS** para vendas B2C intra-UE) — confirme com contador.
 
-> **Nota de implementação:** o Checkout já envia `automatic_tax: { enabled: true }`, `tax_id_collection: { enabled: true }`, `invoice_creation: { enabled: true }` e `billing_address_collection: 'required'`. Sem o **Stripe Tax** ligado no Dashboard, a criação da Session **falha**. Ative Tax (Test e Live) antes de vender.
+> **Nota de implementação:** o Checkout envia `invoice_creation`, `tax_id_collection` e `billing_address_collection`. **`automatic_tax` está desligado** — a conta Stripe é BR e o Stripe Tax ainda não é suportado nesse país; ligar o flag faz `checkout.sessions.create` falhar. Quando o Tax existir para BR, volte o flag e adicione registrations. Enquanto isso, VAT na UE é assunto de contador (Non-Union OSS), não do Stripe.
 
 ---
 

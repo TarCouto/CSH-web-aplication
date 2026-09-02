@@ -300,3 +300,13 @@ export type Product = Database['public']['Tables']['products']['Row']
 export type Order = Database['public']['Tables']['orders']['Row']
 export type Entitlement = Database['public']['Tables']['entitlements']['Row']
 export type Download = Database['public']['Tables']['downloads']['Row']
+
+/**
+ * Product shape available to anon/authenticated. The internal columns are
+ * revoked from those roles in 0005_column_privileges.sql, so anything read
+ * with a non-service client must use this type.
+ */
+export type PublicProduct = Omit<
+  Product,
+  'stripe_product_id' | 'stripe_price_id' | 'storage_path'
+>

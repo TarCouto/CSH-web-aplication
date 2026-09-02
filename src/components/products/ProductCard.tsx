@@ -2,14 +2,14 @@ import Link from 'next/link'
 
 import { FadeIn } from '@/components/FadeIn'
 import { formatPrice } from '@/lib/money'
-import { type Json, type Product } from '@/lib/supabase/types'
+import { type Json, type PublicProduct } from '@/lib/supabase/types'
 
 function asStringArray(value: Json): string[] {
   if (!Array.isArray(value)) return []
   return value.filter((item): item is string => typeof item === 'string')
 }
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product }: { product: PublicProduct }) {
   const techStack = asStringArray(product.tech_stack)
 
   return (

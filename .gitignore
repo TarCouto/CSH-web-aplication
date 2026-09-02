@@ -27,6 +27,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# generated placeholder zip
+.tmp/
+
 # vercel
 .vercel
 
