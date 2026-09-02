@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { env } from '@/lib/env'
 import { getClientIp } from '@/lib/get-client-ip'
+import { isSameOrigin } from '@/lib/http'
 import { rateLimit } from '@/lib/rate-limit'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -27,6 +28,13 @@ export async function GET(
 
   try {
     const { productId } = await params
+
+    // This GET consumes download quota, and SameSite=Lax still sends the
+    // session cookie on top-level cross-site navigation — so a plain link
+    // could burn a buyer's quota without an origin check.
+    if (!isSameOrigin(request)) {
+      return new NextResponse('Cross-origin request blocked', { status: 403 })
+    }
 
     if (!isValidUuid(productId)) {
       return new NextResponse('Product not found.', { status: 404 })

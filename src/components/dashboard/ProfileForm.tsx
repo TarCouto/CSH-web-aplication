@@ -54,6 +54,12 @@ export function ProfileForm({
     const formData = new FormData(e.currentTarget)
     const nextName = String(formData.get('fullName') ?? '').trim()
 
+    if (nextName.length > 120) {
+      setLoading(false)
+      setError('Name must be 120 characters or fewer.')
+      return
+    }
+
     const supabase = createClient()
     const { error: updateError } = await supabase
       .from('profiles')
@@ -63,7 +69,9 @@ export function ProfileForm({
     setLoading(false)
 
     if (updateError) {
-      setError(updateError.message)
+      // Raw Postgres/PostgREST messages leak column, constraint and policy names.
+      console.error('Profile update failed:', updateError)
+      setError('Could not save your profile. Please try again.')
       return
     }
 

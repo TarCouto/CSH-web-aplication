@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
 
 import { env, isStripeConfigured } from '@/lib/env'
+import {
+  crossOriginResponse,
+  isSameOrigin,
+  TEN_MINUTES_MS,
+  tooManyRequestsResponse,
+} from '@/lib/http'
+import { rateLimit } from '@/lib/rate-limit'
 import { getStripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -12,13 +19,10 @@ import { getProfile } from '@/server/services/profiles'
 
 export const runtime = 'nodejs'
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
-    if (!isStripeConfigured()) {
-      return NextResponse.json(
-        { error: 'Billing is not configured yet.' },
-        { status: 503 },
-      )
+    if (!isSameOrigin(request)) {
+      return crossOriginResponse()
     }
 
     const supabase = await createClient()
@@ -26,8 +30,26 @@ export async function POST() {
       data: { user },
     } = await supabase.auth.getUser()
 
+    // Authenticate before reporting configuration state: an anonymous caller
+    // should not learn whether billing is set up.
     if (!user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!isStripeConfigured()) {
+      return NextResponse.json(
+        { error: 'Billing is not configured yet.' },
+        { status: 503 },
+      )
+    }
+
+    const limit = await rateLimit(`billing-portal:${user.id}`, {
+      limit: 5,
+      windowMs: TEN_MINUTES_MS,
+    })
+
+    if (!limit.allowed) {
+      return tooManyRequestsResponse(limit)
     }
 
     const profile = await getProfile(supabase, user.id)

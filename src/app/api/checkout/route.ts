@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
 
 import { env } from '@/lib/env'
+import {
+  crossOriginResponse,
+  isSameOrigin,
+  TEN_MINUTES_MS,
+  tooManyRequestsResponse,
+} from '@/lib/http'
+import { rateLimit } from '@/lib/rate-limit'
 import { getStripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -14,6 +21,10 @@ export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
   try {
+    if (!isSameOrigin(request)) {
+      return crossOriginResponse()
+    }
+
     const supabase = await createClient()
     const {
       data: { user },
@@ -21,6 +32,15 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const limit = await rateLimit(`checkout:${user.id}`, {
+      limit: 10,
+      windowMs: TEN_MINUTES_MS,
+    })
+
+    if (!limit.allowed) {
+      return tooManyRequestsResponse(limit)
     }
 
     const body = await request.json()

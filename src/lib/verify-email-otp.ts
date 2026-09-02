@@ -19,9 +19,21 @@ export function parseOtpType(value: string | null): EmailOtpType | null {
   return value as EmailOtpType
 }
 
+/** Supabase token hashes are hex/base64url-ish; reject anything else before spending a verify call. */
+const TOKEN_HASH_PATTERN = /^[A-Za-z0-9_-]{16,256}$/
+
 export function parseTokenHash(value: string | null): string | null {
   if (!value) return null
-  return decodeURIComponent(value)
+
+  let decoded: string
+  try {
+    decoded = decodeURIComponent(value)
+  } catch {
+    return null
+  }
+
+  const trimmed = decoded.trim()
+  return TOKEN_HASH_PATTERN.test(trimmed) ? trimmed : null
 }
 
 /** Signup confirmation may accept signup or email; other flows use the URL type only. */
