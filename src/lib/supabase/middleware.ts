@@ -1,7 +1,12 @@
 import { createServerClient } from '@supabase/ssr'
+import { type User } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { safeRedirectPath, serverSessionCookieOptions } from '@/lib/auth'
+import {
+  isStaleAuthError,
+  safeRedirectPath,
+  serverSessionCookieOptions,
+} from '@/lib/auth'
 import { getPublicSupabaseConfig, isSupabaseConfigured } from '@/lib/env'
 import { type Database } from '@/lib/supabase/types'
 
@@ -46,14 +51,23 @@ export async function updateSession(request: NextRequest) {
     },
   })
 
+  let authenticatedUser: User | null = null
+
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser()
+
+  if (authError && isStaleAuthError(authError.message)) {
+    await supabase.auth.signOut()
+  } else {
+    authenticatedUser = user
+  }
 
   const { pathname } = request.nextUrl
   const isAuthPage = pathname === '/login' || pathname === '/signup'
 
-  if (user && isAuthPage) {
+  if (authenticatedUser && isAuthPage) {
     const next = safeRedirectPath(request.nextUrl.searchParams.get('redirect'))
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = next

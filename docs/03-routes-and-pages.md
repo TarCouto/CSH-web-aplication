@@ -20,6 +20,8 @@ Todas usam `RootLayout` como shell (header + footer).
 |------|---------|-------|-----------|
 | `/login` | `src/app/login/page.tsx` | Log in | Login de conta |
 | `/signup` | `src/app/signup/page.tsx` | Sign up | Cadastro |
+| `/signup/confirm` | `src/app/signup/confirm/page.tsx` | Confirm your email | Confirmação manual pós-link do e-mail (cadastro) |
+| `/confirm` | `src/app/confirm/page.tsx` | Confirm your request | Confirmação manual (magic link, reset password) |
 | `/signup/confirmed` | `src/app/signup/confirmed/page.tsx` | Email confirmed | Sucesso pós-confirmação de e-mail |
 | `/signup/confirm-failed` | `src/app/signup/confirm-failed/page.tsx` | Confirmation failed | Erro na confirmação — tentar cadastro de novo |
 

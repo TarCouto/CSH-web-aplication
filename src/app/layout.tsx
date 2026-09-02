@@ -4,6 +4,7 @@ import { AuthSessionProvider } from '@/components/auth/AuthSessionProvider'
 import { JsonLd } from '@/components/JsonLd'
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { themeInitScript } from '@/components/theme/theme-init'
+import { isStaleAuthError } from '@/lib/auth'
 import { isSupabaseConfigured } from '@/lib/env'
 import { SITE_URL } from '@/lib/site-url'
 import { createClient } from '@/lib/supabase/server'
@@ -55,8 +56,14 @@ export default async function Layout({ children }: { children: React.ReactNode }
     const supabase = await createClient()
     const {
       data: { user },
+      error: authError,
     } = await supabase.auth.getUser()
-    isAuthenticated = Boolean(user)
+
+    if (authError && isStaleAuthError(authError.message)) {
+      await supabase.auth.signOut()
+    } else {
+      isAuthenticated = Boolean(user)
+    }
   }
 
   return (

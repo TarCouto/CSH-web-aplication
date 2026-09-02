@@ -56,15 +56,21 @@ Subject sugerido:
 
 **Não use** `{{ .ConfirmationURL }}` nos templates de e-mail. Esse URL termina em `/auth/callback?code=...` e depende do cookie PKCE do navegador em que o usuário se cadastrou — falha ao abrir o link no webmail, celular ou Outlook SafeLinks.
 
-Use `{{ .SiteURL }}` + `{{ .TokenHash }}` apontando para `/auth/confirm`:
+Use `{{ .SiteURL }}` + `{{ .TokenHash }}` apontando para páginas de **confirmação manual** (botão). Scanners de e-mail fazem prefetch de links GET e consumiriam o token se a verificação ocorresse ao abrir a URL.
 
 | Template | Link |
 |----------|------|
-| Confirm signup | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup&next=/signup/confirmed` |
-| Magic link | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard` |
-| Reset password | `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/dashboard/profile` |
+| Confirm signup | `{{ .SiteURL }}/signup/confirm?token_hash={{ .TokenHash }}&type=signup&next=/signup/confirmed` |
+| Magic link | `{{ .SiteURL }}/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard` |
+| Reset password | `{{ .SiteURL }}/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/dashboard/profile` |
 
-A rota `src/app/auth/confirm/route.ts` chama `verifyOtp({ type, token_hash })` e redireciona conforme `next`:
+Links antigos com `/auth/confirm` redirecionam para a página correta **sem** consumir o token.
+
+Fluxo:
+
+1. O usuário abre o link → página com botão **Confirm my email** (`/signup/confirm` ou `/confirm`).
+2. Ao clicar, `POST /api/auth/confirm` chama `verifyOtp({ type, token_hash })`.
+3. Sucesso → redirect para `next` (sanitizado com `safeRedirectPath`).
 
 | Resultado | Destino (signup) | Destino (outros fluxos) |
 |-----------|------------------|------------------------|
@@ -79,7 +85,7 @@ A rota `src/app/auth/confirm/route.ts` chama `verifyOtp({ type, token_hash })` e
 2. Confirme Site URL e Redirect URLs (secção 2).
 3. Crie uma conta nova em um navegador.
 4. Abra o e-mail de confirmação e clique no link **em outro navegador ou dispositivo** (simula webmail).
-5. Deve abrir `/signup/confirmed` com instruções de primeiro login — conta confirmada.
+5. Deve abrir `/signup/confirm` com botão — clique em **Confirm my email** → `/signup/confirmed`.
 6. Link já usado ou expirado → `/signup/confirm-failed` (cadastro) ou `/login?error=confirm_failed` (magic link).
 7. O From deve ser `Couto Software House <support@couto.software>` (ou o sender configurado), sem “powered by Supabase”.
 

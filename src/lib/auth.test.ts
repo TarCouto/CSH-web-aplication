@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import { isSignupConfirmFlow, safeRedirectPath } from './auth'
+import { isSignupConfirmFlow, isStaleAuthError, safeRedirectPath } from './auth'
 
 describe('safeRedirectPath', () => {
   it('allows same-origin relative paths', () => {
@@ -28,5 +28,17 @@ describe('isSignupConfirmFlow', () => {
     assert.equal(isSignupConfirmFlow('/signup/confirmed'), true)
     assert.equal(isSignupConfirmFlow('/dashboard'), false)
     assert.equal(isSignupConfirmFlow(null), false)
+  })
+})
+
+describe('isStaleAuthError', () => {
+  it('detects invalid session errors from Supabase', () => {
+    assert.equal(
+      isStaleAuthError('User from sub claim in JWT does not exist'),
+      true,
+    )
+    assert.equal(isStaleAuthError('Invalid JWT'), true)
+    assert.equal(isStaleAuthError('JWT expired'), true)
+    assert.equal(isStaleAuthError('Invalid login credentials'), false)
   })
 })

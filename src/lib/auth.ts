@@ -26,6 +26,15 @@ export function isSignupConfirmFlow(next: string | null | undefined): boolean {
   return next === SIGNUP_CONFIRM_SUCCESS_PATH
 }
 
+export function isStaleAuthError(message: string): boolean {
+  const lower = message.toLowerCase()
+  return (
+    lower.includes('does not exist') ||
+    lower.includes('invalid jwt') ||
+    lower.includes('jwt expired')
+  )
+}
+
 export function safeRedirectPath(value: string | null | undefined): string {
   if (
     !value ||
