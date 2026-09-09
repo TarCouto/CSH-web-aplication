@@ -11,6 +11,19 @@ Before implementing any feature, bugfix, or refactor in this repo:
 2. **Follow existing patterns** — match how similar pages, API routes, and services are already built.
 3. **Do not invent parallel structures** when the project already has a convention.
 
+## Role skills (load the matching one before designing)
+
+| Task | Skill |
+|------|-------|
+| Where new work belongs, trust boundaries, new table/route/dependency, trade-offs | `.cursor/skills/solutions-architect/SKILL.md` |
+| Pages, components, client/server boundary, forms, metadata, loading states | `.cursor/skills/tech-lead-frontend/SKILL.md` |
+| API routes, services, Supabase/Stripe, RLS, migrations, webhooks, rate limits | `.cursor/skills/tech-lead-backend/SKILL.md` |
+| Spacing, gutters, mobile layout, visual review | `.cursor/skills/senior-ui-ux/SKILL.md` |
+
+Skills are mirrored to `.claude/skills/` for Claude Code. **`.cursor/skills/` is the
+source of truth** — edit there, then run `npm run skills:sync`. CI fails if the
+two trees diverge.
+
 ## Architecture checklist
 
 | Layer | Location | Pattern |

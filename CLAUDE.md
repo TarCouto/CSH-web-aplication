@@ -15,6 +15,10 @@ For any feature, bugfix, or refactor:
    clients are already built. Do not invent parallel structures. For UI/UX, spacing,
    or mobile layout, follow `.cursor/skills/senior-ui-ux/SKILL.md` and
    `src/lib/spacing.ts`.
+   Load the role skill that matches the task:
+   `.cursor/skills/solutions-architect` (where work belongs, trust boundaries, trade-offs),
+   `.cursor/skills/tech-lead-frontend` (pages, client/server boundary, forms, metadata),
+   `.cursor/skills/tech-lead-backend` (routes, services, Supabase/Stripe, RLS, migrations).
 4. **State assumptions explicitly** in the plan and validate the risky ones before
    writing a lot of code.
 
