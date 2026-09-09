@@ -1,6 +1,8 @@
-import { NextResponse } from 'next/server'
-
-import { crossOriginResponse, isSameOrigin } from '@/lib/http'
+import {
+  crossOriginResponse,
+  isSameOrigin,
+  redirectAfterPost,
+} from '@/lib/http'
 import { createClient } from '@/lib/supabase/server'
 
 export async function POST(request: Request) {
@@ -12,5 +14,5 @@ export async function POST(request: Request) {
   const supabase = await createClient()
   await supabase.auth.signOut()
 
-  return NextResponse.redirect(new URL('/', request.url))
+  return redirectAfterPost(request, '/')
 }

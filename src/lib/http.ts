@@ -55,6 +55,17 @@ export function isSameOrigin(request: Request): boolean {
   }
 }
 
+/**
+ * Redirect a browser after a form POST.
+ *
+ * `NextResponse.redirect` defaults to **307**, which preserves the method — the browser
+ * would re-POST to the target and a page route answers that with 405, dumping the user
+ * on a blank error screen. 303 is the status that tells the browser to switch to GET.
+ */
+export function redirectAfterPost(request: Request, path: string) {
+  return NextResponse.redirect(new URL(path, request.url), 303)
+}
+
 export function crossOriginResponse() {
   return NextResponse.json(
     { error: 'Cross-origin request blocked' },

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
 import { env } from './env'
-import { isSameOrigin } from './http'
+import { isSameOrigin, redirectAfterPost } from './http'
 
 // Derived from the configured app URL so the suite behaves the same locally
 // (localhost fallback) and in CI (NEXT_PUBLIC_APP_URL is set).
@@ -58,5 +58,27 @@ describe('isSameOrigin', () => {
       ),
       true,
     )
+  })
+})
+
+describe('redirectAfterPost', () => {
+  const request = new Request(`${SITE}/auth/signout`, { method: 'POST' })
+
+  it('uses 303 so the browser switches to GET', () => {
+    // 307 would make the browser re-POST to the target, and a page route
+    // answers a POST with 405 — a blank error screen instead of the home page.
+    assert.equal(redirectAfterPost(request, '/').status, 303)
+  })
+
+  it('resolves the path against the request origin', () => {
+    const location = redirectAfterPost(request, '/').headers.get('location')
+    assert.equal(location, `${SITE}/`)
+  })
+
+  it('keeps query strings on the target', () => {
+    const location = redirectAfterPost(request, '/login?error=x').headers.get(
+      'location',
+    )
+    assert.equal(location, `${SITE}/login?error=x`)
   })
 })
