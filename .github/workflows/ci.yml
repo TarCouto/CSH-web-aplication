@@ -35,6 +35,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Skills in sync
+        run: npm run skills:check
+
       - name: Generate Next.js types
         run: npx next typegen
 

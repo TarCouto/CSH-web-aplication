@@ -12,6 +12,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "node scripts/run-tests.mjs",
+    "skills:check": "node scripts/check-skills-sync.mjs",
+    "skills:sync": "node scripts/check-skills-sync.mjs --fix",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "node scripts/seed.mjs",
     "db:seed:zip": "node scripts/seed-meterkit-zip.mjs",
